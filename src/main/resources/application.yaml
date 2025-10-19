@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import: DATABASE_CONFIG.properties
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
