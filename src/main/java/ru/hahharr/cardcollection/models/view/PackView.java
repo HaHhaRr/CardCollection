@@ -1,6 +1,6 @@
-package cardcollection.models.view;
+package ru.hahharr.cardcollection.models.view;
 
-import cardcollection.models.entity.Collection;
+import ru.hahharr.cardcollection.models.entity.Collection;
 import lombok.Builder;
 import lombok.Data;
 

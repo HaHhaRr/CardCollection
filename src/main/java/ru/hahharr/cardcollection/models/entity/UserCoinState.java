@@ -1,7 +1,13 @@
-package cardcollection.models.entity;
+package ru.hahharr.cardcollection.models.entity;
 
+import ru.hahharr.cardcollection.models.primitives.CustomId;
+import ru.hahharr.cardcollection.models.primitives.id.UserId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,8 +18,8 @@ import java.time.LocalDateTime;
 public class UserCoinState {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @CustomId
+    private UserId id;
 
     @JsonIgnore
     @Column(name = "totalCoins", nullable = false)

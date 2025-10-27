@@ -1,10 +1,15 @@
-package cardcollection.models.entity;
+package ru.hahharr.cardcollection.models.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
+import ru.hahharr.cardcollection.models.primitives.CustomId;
+import ru.hahharr.cardcollection.models.primitives.id.PackId;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.util.List;
@@ -15,15 +20,14 @@ import java.util.List;
 public class Pack {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long packId;
+    @CustomId
+    private PackId id;
 
     @Column(name = "name", nullable = false, unique = true)
     @NotBlank(message = "Поле packName не может быть пустым")
-    private String packName;
+    private String name;
 
     @Column(name = "cost", nullable = false)
-    @Pattern(regexp = "\\d+", message = "Поле cost должно содержать число")
     private int cost;
 
     @ManyToOne
@@ -32,6 +36,5 @@ public class Pack {
     private Collection collection;
 
     @Column(name = "cards", nullable = false)
-    @NotNull(message = "Поле cards не может быть пустым")
     private List<Long> cards;
 }

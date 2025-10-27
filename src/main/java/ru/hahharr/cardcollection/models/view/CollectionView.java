@@ -1,4 +1,4 @@
-package cardcollection.models.view;
+package ru.hahharr.cardcollection.models.view;
 
 import lombok.Builder;
 import lombok.Data;

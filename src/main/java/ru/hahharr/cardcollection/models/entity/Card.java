@@ -1,7 +1,15 @@
-package cardcollection.models.entity;
+package ru.hahharr.cardcollection.models.entity;
 
-import cardcollection.models.Rarity;
-import jakarta.persistence.*;
+import ru.hahharr.cardcollection.models.Rarity;
+import ru.hahharr.cardcollection.models.primitives.CustomId;
+import ru.hahharr.cardcollection.models.primitives.id.CardId;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -12,12 +20,12 @@ import lombok.Data;
 public class Card {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cardId;
+    @CustomId
+    private CardId id;
 
     @Column(name = "name", nullable = false, unique = true)
     @NotBlank(message = "Поле cardName не может быть пустым")
-    private String cardName;
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "collection_collectionId", nullable = false)

@@ -1,9 +1,14 @@
-package cardcollection.models.entity;
+package ru.hahharr.cardcollection.models.entity;
 
+import ru.hahharr.cardcollection.models.primitives.CustomId;
+import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -14,15 +19,14 @@ import java.util.List;
 public class Collection {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long collectionId;
+    @CustomId
+    private CollectionId id;
 
     @Column(name = "name", nullable = false, unique = true)
     @NotBlank(message = "Поле collectionName не может быть пустым")
-    private String collectionName;
+    private String name;
 
     @JsonBackReference
     @OneToMany(mappedBy = "collection")
-    @NotNull(message = "Поле cards не может быть пустым")
     private List<Card> cards;
 }
