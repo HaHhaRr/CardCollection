@@ -29,11 +29,11 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    @JsonBackReference(value = "user-collection")
+    @JsonBackReference(value = "user 8====B collection")
     private UserCollection userCollection;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    @JsonBackReference(value = "user-coin_state")
+    @JsonBackReference(value = "user 8====B coin_state")
     private UserCoinState userCoinState;
 }

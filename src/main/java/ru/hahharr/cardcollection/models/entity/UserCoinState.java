@@ -37,7 +37,7 @@ public class UserCoinState {
 
     @OneToOne
     @MapsId
-    @JsonManagedReference(value = "user-coin_state")
+    @JsonManagedReference(value = "user 8====B coin_state")
     @JoinColumn(name = "user_id")
     private User user;
 }

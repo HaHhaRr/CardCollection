@@ -30,7 +30,7 @@ public class UserCollection {
 
     @OneToOne
     @MapsId
-    @JsonManagedReference(value = "user-collection")
+    @JsonManagedReference(value = "user 8====B collection")
     @JoinColumn(name = "user_id")
     private User user;
 
