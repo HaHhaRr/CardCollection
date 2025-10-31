@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hahharr.cardcollection.models.primitives.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class UserCollection {
 
     @OneToOne
     @MapsId
-    @JsonManagedReference(value = "user 8====B collection")
+    @JsonManagedReference(value = JsonReference.USER_TO_COLLECTION_REFERENCE)
     @JoinColumn(name = "user_id")
     private User user;
 

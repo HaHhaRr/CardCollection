@@ -7,6 +7,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
 import ru.hahharr.cardcollection.models.primitives.CustomId;
+import ru.hahharr.cardcollection.models.primitives.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,11 +30,11 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    @JsonBackReference(value = "user 8====B collection")
+    @JsonBackReference(value = JsonReference.USER_TO_COLLECTION_REFERENCE)
     private UserCollection userCollection;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    @JsonBackReference(value = "user 8====B coin_state")
+    @JsonBackReference(value = JsonReference.USER_TO_COIN_STATE_REFERENCE)
     private UserCoinState userCoinState;
 }

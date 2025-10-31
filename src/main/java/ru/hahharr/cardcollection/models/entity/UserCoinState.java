@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.hahharr.cardcollection.models.primitives.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ public class UserCoinState {
 
     @OneToOne
     @MapsId
-    @JsonManagedReference(value = "user 8====B coin_state")
+    @JsonManagedReference(value = JsonReference.USER_TO_COIN_STATE_REFERENCE)
     @JoinColumn(name = "user_id")
     private User user;
 }
