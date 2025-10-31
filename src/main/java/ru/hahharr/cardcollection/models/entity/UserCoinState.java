@@ -1,35 +1,43 @@
 package ru.hahharr.cardcollection.models.entity;
 
-import ru.hahharr.cardcollection.models.primitives.CustomId;
-import ru.hahharr.cardcollection.models.primitives.id.UserId;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.hahharr.cardcollection.models.primitives.id.UserId;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "userCoinState")
 public class UserCoinState {
 
     @Id
-    @CustomId
+    @Column(name = "user_id")
     private UserId id;
 
-    @JsonIgnore
     @Column(name = "totalCoins", nullable = false)
     private int totalCoins;
 
-    @JsonIgnore
     @Column(name = "available", nullable = false)
     private boolean availableFree;
 
-    @JsonIgnore
     @Column(name = "lastReceived", nullable = false)
     private LocalDateTime lastReceived;
+
+    @OneToOne
+    @MapsId
+    @JsonManagedReference(value = "user-coin_state")
+    @JoinColumn(name = "user_id")
+    private User user;
 }

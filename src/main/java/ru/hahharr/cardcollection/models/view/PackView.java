@@ -3,6 +3,7 @@ package ru.hahharr.cardcollection.models.view;
 import ru.hahharr.cardcollection.models.entity.Collection;
 import lombok.Builder;
 import lombok.Data;
+import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 
 @Data
 @Builder
@@ -14,5 +15,5 @@ public class PackView {
 
     private int cost;
 
-    private Collection collection;
+    private CollectionId collectionId;
 }
