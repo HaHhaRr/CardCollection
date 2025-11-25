@@ -14,6 +14,8 @@ import org.hibernate.id.enhanced.SequenceStyleGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.io.Serial;
+
 public class IdGenerator extends SequenceStyleGenerator {
 
     @Autowired

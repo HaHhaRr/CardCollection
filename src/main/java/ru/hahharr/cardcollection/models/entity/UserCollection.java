@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.hahharr.cardcollection.models.primitives.JsonReference;
+import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 
 import java.util.List;
@@ -36,5 +37,5 @@ public class UserCollection {
     private User user;
 
     @Column(name = "cards")
-    private List<Long> cards;
+    private List<CardId> cards;
 }
