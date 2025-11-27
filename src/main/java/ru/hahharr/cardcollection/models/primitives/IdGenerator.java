@@ -18,6 +18,9 @@ import java.io.Serial;
 
 public class IdGenerator extends SequenceStyleGenerator {
 
+    @Serial
+    private static final long serialVersionUID = 7405914516155356881L;
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

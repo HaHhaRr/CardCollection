@@ -69,29 +69,20 @@ public class JwtService {
         return generateToken(null, userDetails, refreshTokenExpiration);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
-        Claims claims = extractAllClaims(token);
-        return resolver.apply(claims);
-    }
-
     public long getExpirationTime(String token) {
-        return Math.abs(extractExpiration(token).getTime() - extractIssuedAt(token).getTime());
+        long expiration = extractAllClaims(token).getExpiration().getTime();
+        long issuedAt = extractAllClaims(token).getIssuedAt().getTime();
+
+        return Math.abs(expiration - issuedAt);
     }
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    private Date extractIssuedAt(String token) {
-        return extractClaim(token, Claims::getIssuedAt);
+        return extractAllClaims(token).getSubject();
     }
 
     private boolean isTokenExpired(String token) {
-        return !extractExpiration(token).before(new Date());
+        Date expiration = extractAllClaims(token).getExpiration();
+        return !expiration.before(new Date());
     }
 
     public boolean isValidToken(String token, UserDetails userDetails) {

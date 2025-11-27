@@ -31,6 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+###Packages and files###
 **/src/main/**/values.properties
 /src/main/java/ru/hahharr/cardcollection/controller/CardController.java
 src/main/java/ru/hahharr/cardcollection/security/DemoController.java

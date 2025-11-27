@@ -43,7 +43,7 @@ public class AuthenticationService {
     @Autowired
     private CustomUserDetailService customUserDetailService;
 
-    public TokenResponseDto register(LoginRequestDto request) {
+    public HttpStatus register(LoginRequestDto request) {
         User user = new User();
 
         user.setUsername(request.getUsername());
@@ -52,12 +52,7 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        UserDetails userDetails = new CustomUserDetails(user);
-
-        String accessToken = jwtService.generateAccessToken(userDetails);
-        String refreshToken = jwtService.generateRefreshToken(userDetails);
-
-        return new TokenResponseDto(accessToken, refreshToken);
+        return HttpStatus.OK;
     }
 
     public TokenResponseDto authenticate(LoginRequestDto request) {
