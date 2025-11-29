@@ -14,7 +14,12 @@ import org.hibernate.id.enhanced.SequenceStyleGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.io.Serial;
+
 public class IdGenerator extends SequenceStyleGenerator {
+
+    @Serial
+    private static final long serialVersionUID = 7405914516155356881L;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

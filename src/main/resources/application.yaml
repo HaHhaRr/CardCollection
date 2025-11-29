@@ -3,9 +3,10 @@ server:
 
 spring:
   config:
-    import: DATABASE_CONFIG.properties
+    import: values.properties
 
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
       ddl-auto: update
@@ -17,3 +18,9 @@ spring:
     url: ${POSTGRES_URL}
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
+
+security:
+  jwt:
+    secret_key: ${JWT_SECRET_KEY}
+    access_token_expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+    refresh_token_expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}

@@ -1,6 +1,7 @@
 package ru.hahharr.cardcollection.models.entity;
 
 import ru.hahharr.cardcollection.models.primitives.CustomId;
+import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.PackId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,5 +37,5 @@ public class Pack {
     private Collection collection;
 
     @Column(name = "cards", nullable = false)
-    private List<Long> cards;
+    private List<CardId> cards;
 }
