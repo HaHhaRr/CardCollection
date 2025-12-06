@@ -1,9 +1,5 @@
 package ru.hahharr.cardcollection.models.entity;
 
-import ru.hahharr.cardcollection.models.Rarity;
-import ru.hahharr.cardcollection.models.primitives.CustomId;
-import ru.hahharr.cardcollection.models.primitives.id.CardId;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,10 +8,23 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import ru.hahharr.cardcollection.models.primitives.CustomId;
+import ru.hahharr.cardcollection.models.primitives.id.CardId;
+import ru.hahharr.cardcollection.models.primitives.rarity.Rarity;
 
 @Entity
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@EqualsAndHashCode
 @Table(name = "Card")
 public class Card {
 

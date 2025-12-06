@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.hahharr.cardcollection.models.entity.User;
-import ru.hahharr.cardcollection.repository.UserRepository;
+import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
 
 import java.util.Optional;
 
