@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ru.hahharr.cardcollection.models.entity.DropChance;
 import ru.hahharr.cardcollection.models.entity.Pack;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
@@ -25,13 +26,11 @@ public class PackRepoService {
     @Autowired
     private CardRepoService cardRepoService;
 
-    public ResponseEntity<HttpStatus> saveNewPack(String packName, long collectionId, int cost,
-                                                  double epicDropChance, double rareDropChance, List<Long> listIds) {
-        if (!collectionRepository.existsById(new CollectionId(collectionId))
-                || !cardRepoService.findCardIdsByCollection(collectionId).equals(new HashSet<>(listIds))
-                || cost < 0
-                || epicDropChance >= rareDropChance
-                || (epicDropChance + rareDropChance) >= 1) {
+    public ResponseEntity<HttpStatus> saveNewPack(String packName, CollectionId collectionId, int cost,
+                                                  int epicDropChance, int rareDropChance, int commonDropChance,
+                                                  List<Long> listIds) {
+        if (isValidParam(collectionId, cost, epicDropChance,
+                rareDropChance, commonDropChance, listIds)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -42,14 +41,27 @@ public class PackRepoService {
         Pack newPack = Pack.builder()
                 .name(packName)
                 .cost(cost)
-                .collection(collectionRepository.findById(new CollectionId(collectionId)).get())
+                .collection(collectionRepository.findById(collectionId).get())
                 .cards(cardIdList)
-                .epicDropChance(epicDropChance)
-                .rareDropChance(rareDropChance)
-                .commonDropChance(1 - epicDropChance - rareDropChance)
                 .build();
+        newPack.setDropChance(DropChance.builder()
+                .commonDropChance(commonDropChance)
+                .rareDropChance(rareDropChance)
+                .epicDropChance(epicDropChance)
+                .pack(newPack)
+                .build());
         packRepository.save(newPack);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean isValidParam(CollectionId collectionId, int cost, int epicDropChance,
+                                 int rareDropChance, int commonDropChance, List<Long> listIds) {
+        return !collectionRepository.existsById(collectionId)
+                || !cardRepoService.findCardIdsByCollection(collectionId).containsAll(new HashSet<>(listIds))
+                || cost < 0
+                || epicDropChance >= rareDropChance
+                || rareDropChance >= commonDropChance
+                || (epicDropChance + rareDropChance + commonDropChance) > 100;
     }
 }

@@ -1,10 +1,14 @@
 package ru.hahharr.cardcollection.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.hahharr.cardcollection.models.primitives.CustomId;
+import ru.hahharr.cardcollection.models.primitives.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.PackId;
 
@@ -49,12 +54,8 @@ public class Pack {
     @Column(name = "cards", nullable = false)
     private List<CardId> cards;
 
-    @Column(name = "common_drop_chance")
-    private double commonDropChance;
-
-    @Column(name = "rare_drop_chance")
-    private double rareDropChance;
-
-    @Column(name = "epic_drop_chance")
-    private double epicDropChance;
+    @OneToOne(mappedBy = "pack", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    @JsonBackReference(value = JsonReference.PACK_TO_DROP_CHANCE_REFERENCE)
+    private DropChance dropChance;
 }

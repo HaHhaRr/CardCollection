@@ -6,6 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
+import ru.hahharr.cardcollection.models.primitives.rarity.Rarity;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -14,6 +16,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.util.Base64;
 
 @Component
 public class S3Service {
@@ -27,8 +30,9 @@ public class S3Service {
     @Autowired
     private S3Client s3Client;
 
-    public String uploadImage(MultipartFile image) throws IOException {
-        String key = image.getOriginalFilename();
+    public String uploadImage(CollectionId collectionId, Rarity rarity, MultipartFile image) throws IOException {
+        String key = String.join("_", String.valueOf(collectionId.getId()),
+                rarity.name(), image.getOriginalFilename());
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -37,22 +41,8 @@ public class S3Service {
                 .build();
 
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(image.getBytes()));
-        return s3Endpoint + "/" + bucketName;
-    }
+        String url = String.join("/", s3Endpoint, bucketName, key);
 
-    public ResponseEntity<byte[]> downloadImage(String key) throws IOException {
-        GetObjectRequest objectRequest = GetObjectRequest.builder()
-                .bucket(bucketName)
-                .key(key)
-                .build();
-
-        ResponseInputStream<GetObjectResponse> inputStream = s3Client.getObject(objectRequest);
-        byte[] image = inputStream.readAllBytes();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, inputStream.response().contentType());
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(image);
+        return Base64.getEncoder().encodeToString(url.getBytes());
     }
 }

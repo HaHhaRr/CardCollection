@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
+import ru.hahharr.cardcollection.models.primitives.rarity.Rarity;
 import ru.hahharr.cardcollection.repository.services.CardRepoService;
 import ru.hahharr.cardcollection.repository.services.CollectionRepoService;
 import ru.hahharr.cardcollection.repository.services.PackRepoService;
@@ -40,22 +42,24 @@ public class AdminController {
 
     @PostMapping("/addCard")
     public ResponseEntity<HttpStatus> addCard(@RequestParam String cardName,
-                                              @RequestParam long collectionId,
-                                              @RequestParam int rarity,
+                                              @RequestParam CollectionId collectionId,
+                                              @RequestParam Rarity rarity,
                                               @RequestParam MultipartFile image) throws IOException {
 
-        String url = s3Service.uploadImage(image);
+        String url = s3Service.uploadImage(collectionId, rarity, image);
         return cardRepoService.saveNewCard(cardName, collectionId,
-                rarity, url + "/" + image.getOriginalFilename());
+                rarity, url);
     }
 
     @PostMapping("/addPack")
     public ResponseEntity<HttpStatus> addPack(@RequestParam String packName,
-                                              @RequestParam long collectionId,
+                                              @RequestParam CollectionId collectionId,
                                               @RequestParam int cost,
-                                              @RequestParam double epicDropChance,
-                                              @RequestParam double rareDropChance,
+                                              @RequestParam int epicDropChance,
+                                              @RequestParam int rareDropChance,
+                                              @RequestParam int commonDropChance,
                                               @RequestBody List<Long> listIds) {
-        return packRepoService.saveNewPack(packName, collectionId, cost, epicDropChance, rareDropChance, listIds);
+        return packRepoService.saveNewPack(packName, collectionId, cost, epicDropChance,
+                rareDropChance, commonDropChance, listIds);
     }
 }

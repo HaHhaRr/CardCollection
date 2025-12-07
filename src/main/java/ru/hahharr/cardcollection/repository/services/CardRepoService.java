@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.hahharr.cardcollection.models.entity.Card;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
-import ru.hahharr.cardcollection.models.primitives.rarity.RarityCardResolver;
+import ru.hahharr.cardcollection.models.primitives.rarity.Rarity;
 import ru.hahharr.cardcollection.repository.interfaces.CardRepository;
 import ru.hahharr.cardcollection.repository.interfaces.CollectionRepository;
 
@@ -25,27 +25,25 @@ public class CardRepoService {
     @Autowired
     private CollectionRepository collectionRepository;
 
-    @Autowired
-    private RarityCardResolver rarityCardResolver;
-
-    public ResponseEntity<HttpStatus> saveNewCard(String cardName, long collectionId, int rarity, String URL) throws IOException {
-        if (!collectionRepository.existsById(new CollectionId(collectionId))) {
+    public ResponseEntity<HttpStatus> saveNewCard(String cardName, CollectionId collectionId,
+                                                  Rarity rarity, String url) throws IOException {
+        if (!collectionRepository.existsById(collectionId)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Card newCard = Card.builder()
                 .name(cardName)
-                .collection(collectionRepository.findById(new CollectionId(collectionId)).get())
-                .rarity(rarityCardResolver.resolveRarity(rarity))
-                .imageUrl(URL)
+                .collection(collectionRepository.findById(collectionId).get())
+                .rarity(rarity)
+                .imageUrl(url)
                 .build();
         cardRepository.save(newCard);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public Set<Long> findCardIdsByCollection(long collectionId) {
-        List<Card> cardIdList = cardRepository.findByCollectionId(new CollectionId(collectionId));
+    public Set<Long> findCardIdsByCollection(CollectionId collectionId) {
+        List<Card> cardIdList = cardRepository.findByCollectionId(collectionId);
         return cardIdList.stream()
                 .map(Card::getId)
                 .map(CardId::getId)
