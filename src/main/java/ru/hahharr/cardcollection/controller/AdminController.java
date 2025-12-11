@@ -15,9 +15,9 @@ import ru.hahharr.cardcollection.repository.services.CardRepoService;
 import ru.hahharr.cardcollection.repository.services.CollectionRepoService;
 import ru.hahharr.cardcollection.repository.services.PackRepoService;
 import ru.hahharr.cardcollection.s3.S3Service;
+import ru.hahharr.cardcollection.utils.dto.AddPackDto;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -45,21 +45,14 @@ public class AdminController {
                                               @RequestParam CollectionId collectionId,
                                               @RequestParam Rarity rarity,
                                               @RequestParam MultipartFile image) throws IOException {
-
-        String url = s3Service.uploadImage(collectionId, rarity, image);
+        long cardId = cardRepoService.countAllRows() + 1;
+        String url = s3Service.uploadImage(cardId, image);
         return cardRepoService.saveNewCard(cardName, collectionId,
                 rarity, url);
     }
 
     @PostMapping("/addPack")
-    public ResponseEntity<HttpStatus> addPack(@RequestParam String packName,
-                                              @RequestParam CollectionId collectionId,
-                                              @RequestParam int cost,
-                                              @RequestParam int epicDropChance,
-                                              @RequestParam int rareDropChance,
-                                              @RequestParam int commonDropChance,
-                                              @RequestBody List<Long> listIds) {
-        return packRepoService.saveNewPack(packName, collectionId, cost, epicDropChance,
-                rareDropChance, commonDropChance, listIds);
+    public ResponseEntity<HttpStatus> addPack(@RequestBody AddPackDto addPackDto) throws IOException {
+        return packRepoService.saveNewPack(addPackDto);
     }
 }

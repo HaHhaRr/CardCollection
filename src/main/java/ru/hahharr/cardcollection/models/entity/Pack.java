@@ -22,6 +22,7 @@ import ru.hahharr.cardcollection.models.primitives.CustomId;
 import ru.hahharr.cardcollection.models.primitives.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.PackId;
+import ru.hahharr.cardcollection.utils.dto.AddPackDto;
 
 import java.util.List;
 

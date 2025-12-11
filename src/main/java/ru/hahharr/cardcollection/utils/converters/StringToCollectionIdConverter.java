@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 
 @Component
-public class LongToCollectionIdConverter implements Converter<String, CollectionId> {
+public class StringToCollectionIdConverter implements Converter<String, CollectionId> {
 
     @Override
     public CollectionId convert(String id) {

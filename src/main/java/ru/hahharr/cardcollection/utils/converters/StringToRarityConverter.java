@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.hahharr.cardcollection.models.primitives.rarity.Rarity;
 
 @Component
-public class IntegerToRarityConverter implements Converter<String, Rarity> {
+public class StringToRarityConverter implements Converter<String, Rarity> {
 
     @Override
     public Rarity convert(String rarity) {

@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import ru.hahharr.cardcollection.models.entity.User;
 import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
 import ru.hahharr.cardcollection.security.Role;
-import ru.hahharr.cardcollection.security.dto.LoginRequestDto;
-import ru.hahharr.cardcollection.security.dto.TokenResponseDto;
+import ru.hahharr.cardcollection.utils.dto.LoginRequestDto;
+import ru.hahharr.cardcollection.utils.dto.TokenResponseDto;
 import ru.hahharr.cardcollection.security.jwt.JwtService;
 import ru.hahharr.cardcollection.security.user.details.CustomUserDetailService;
 

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hahharr.cardcollection.models.entity.User;
 import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
-import ru.hahharr.cardcollection.security.dto.LoginRequestDto;
-import ru.hahharr.cardcollection.security.dto.TokenResponseDto;
+import ru.hahharr.cardcollection.utils.dto.LoginRequestDto;
+import ru.hahharr.cardcollection.utils.dto.TokenResponseDto;
 import ru.hahharr.cardcollection.security.service.AuthenticationService;
 
 import java.util.Optional;
