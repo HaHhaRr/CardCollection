@@ -1,4 +1,4 @@
-package ru.hahharr.cardcollection.security.dto;
+package ru.hahharr.cardcollection.utils.dto;
 
 import lombok.Data;
 

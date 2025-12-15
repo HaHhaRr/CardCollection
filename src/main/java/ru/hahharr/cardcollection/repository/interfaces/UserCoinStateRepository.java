@@ -1,4 +1,4 @@
-package ru.hahharr.cardcollection.repository;
+package ru.hahharr.cardcollection.repository.interfaces;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package ru.hahharr.cardcollection.security.authentication;
+package ru.hahharr.cardcollection.security.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +12,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hahharr.cardcollection.models.entity.User;
-import ru.hahharr.cardcollection.repository.UserRepository;
+import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
 import ru.hahharr.cardcollection.security.Role;
-import ru.hahharr.cardcollection.security.dto.LoginRequestDto;
-import ru.hahharr.cardcollection.security.dto.TokenResponseDto;
+import ru.hahharr.cardcollection.utils.dto.LoginRequestDto;
+import ru.hahharr.cardcollection.utils.dto.TokenResponseDto;
 import ru.hahharr.cardcollection.security.jwt.JwtService;
 import ru.hahharr.cardcollection.security.user.details.CustomUserDetailService;
-import ru.hahharr.cardcollection.security.user.details.CustomUserDetails;
 
 @Service
 public class AuthenticationService {
@@ -48,7 +47,7 @@ public class AuthenticationService {
 
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.USER);
+        user.setRole(Role.ROLE_USER);
 
         userRepository.save(user);
 

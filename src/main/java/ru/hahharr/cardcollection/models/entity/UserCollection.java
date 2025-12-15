@@ -10,8 +10,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.hahharr.cardcollection.models.primitives.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
@@ -19,11 +21,13 @@ import ru.hahharr.cardcollection.models.primitives.id.UserId;
 import java.util.List;
 
 @Entity
-@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
+@EqualsAndHashCode
 @Table(name = "userCollection")
-@Builder
 public class UserCollection {
 
     @Id

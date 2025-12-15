@@ -10,18 +10,22 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.hahharr.cardcollection.models.primitives.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Setter
+@Getter
+@EqualsAndHashCode
 @Table(name = "userCoinState")
 public class UserCoinState {
 
