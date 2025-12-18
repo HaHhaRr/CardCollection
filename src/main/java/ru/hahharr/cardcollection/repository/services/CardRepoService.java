@@ -33,27 +33,14 @@ public class CardRepoService {
         if (collection.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        CardOrm newCardOrm = CardOrm.builder()
-                .name(cardName)
-                .collectionOrm(collection.get())
-                .rarity(rarity)
-                .imageUrl(url)
-                .build();
+        CardOrm newCardOrm = new CardOrm(
+                cardName,
+                url,
+                rarity,
+                collection.get());
         cardRepository.save(newCardOrm);
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public Set<CardId> findCardIdsByCollection(CollectionId collectionId) {
-        Optional<CollectionOrm> collectionOrm = collectionRepository.findById(collectionId);
-        if (collectionOrm.isEmpty()) {
-            throw new NullPointerException();
-        }
-
-        List<CardOrm> cardOrmIdList = collectionOrm.get().getCardOrms();
-        return cardOrmIdList.stream()
-                .map(CardOrm::getId)
-                .collect(Collectors.toSet());
     }
 
     public long countAllRows() {

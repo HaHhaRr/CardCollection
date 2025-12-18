@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.hahharr.cardcollection.models.entity.User;
 import ru.hahharr.cardcollection.models.orm.UserOrm;
-import ru.hahharr.cardcollection.utils.mapper.EntityFromOrm;
+import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
 
 import java.io.Serial;
 import java.util.Collection;
@@ -21,7 +21,7 @@ public class CustomUserDetails implements UserDetails {
     private User user;
 
     public CustomUserDetails(UserOrm userOrm) {
-        this.user = EntityFromOrm.mapUser(userOrm);
+        this.user = EntityFromOrmMapper.mapUser(userOrm);
     }
 
     @Override

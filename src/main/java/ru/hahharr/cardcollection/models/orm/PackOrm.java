@@ -58,4 +58,11 @@ public class PackOrm {
     @OneToOne(mappedBy = "packOrm", cascade = CascadeType.ALL)
     @JsonManagedReference(value = JsonReference.PACK_TO_DROP_CHANCE_REFERENCE)
     private DropChanceOrm dropChanceOrm;
+
+    public PackOrm(String name, int cost, List<CardId> cards, CollectionOrm collectionOrm) {
+        this.name = name;
+        this.cost = cost;
+        this.cards = cards;
+        this.collectionOrm = collectionOrm;
+    }
 }

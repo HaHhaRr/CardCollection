@@ -19,7 +19,7 @@ import ru.hahharr.cardcollection.models.orm.UserOrm;
 import java.util.List;
 
 @Service
-public class EntityToOrm {
+public class EntityToOrmMapper {
 
     public static CardOrm mapCard(Card card, CollectionOrm collectionOrm) {
         return new CardOrm(card.getId(),

@@ -11,20 +11,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.entity.User;
+import ru.hahharr.cardcollection.models.dto.LoginRequestDto;
+import ru.hahharr.cardcollection.models.dto.TokenResponseDto;
 import ru.hahharr.cardcollection.models.orm.UserCoinStateOrm;
 import ru.hahharr.cardcollection.models.orm.UserCollectionOrm;
 import ru.hahharr.cardcollection.models.orm.UserOrm;
 import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
 import ru.hahharr.cardcollection.security.Role;
-import ru.hahharr.cardcollection.models.dto.LoginRequestDto;
-import ru.hahharr.cardcollection.models.dto.TokenResponseDto;
 import ru.hahharr.cardcollection.security.jwt.JwtService;
 import ru.hahharr.cardcollection.security.user.details.CustomUserDetailService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
+import java.util.Collections;
 
 @Service
 public class AuthenticationService {
@@ -50,7 +49,7 @@ public class AuthenticationService {
     @Autowired
     private CustomUserDetailService customUserDetailService;
 
-    public HttpStatus register(LoginRequestDto request) {
+    public ResponseEntity<HttpStatus> register(LoginRequestDto request) {
         UserOrm userOrm = new UserOrm(
                 request.getUsername(),
                 passwordEncoder.encode(request.getPassword()),
@@ -64,11 +63,11 @@ public class AuthenticationService {
 
         userOrm.setUserCollectionOrm(new UserCollectionOrm(
                 userOrm,
-                new ArrayList<>()));
+                Collections.emptyList()));
 
         userRepository.save(userOrm);
 
-        return HttpStatus.OK;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public TokenResponseDto authenticate(LoginRequestDto request) {
