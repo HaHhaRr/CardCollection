@@ -21,7 +21,7 @@ import ru.hahharr.cardcollection.models.primitives.id.PackId;
 import java.util.List;
 
 @Service
-public class EntityFromOrm {
+public class EntityFromOrmMapper {
 
     public static Card mapCard(CardOrm cardOrm) {
         return new Card(cardOrm.getId(),

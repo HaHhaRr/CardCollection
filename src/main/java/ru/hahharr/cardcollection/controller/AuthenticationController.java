@@ -25,11 +25,11 @@ public class AuthenticationController {
     private UserRepository userRepository;
 
     @PostMapping("/registration")
-    public HttpStatus register(@RequestBody LoginRequestDto registrationDto) {
+    public ResponseEntity<HttpStatus> register(@RequestBody LoginRequestDto registrationDto) {
         Optional<UserOrm> user = userRepository.findByUsername(registrationDto.getUsername());
 
         if (user.isPresent()) {
-            return HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return authenticationService.register(registrationDto);
     }

@@ -51,4 +51,11 @@ public class CardOrm {
     @JsonBackReference(value = JsonReference.COLLECTION_TO_CARDS_REFERENCE)
     @NotNull(message = "Поле collection не может быть пустым")
     private CollectionOrm collectionOrm;
+
+    public CardOrm(String name, String imageUrl, Rarity rarity, CollectionOrm collectionOrm) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.rarity = rarity;
+        this.collectionOrm = collectionOrm;
+    }
 }
