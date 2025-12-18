@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.entity.Collection;
-import ru.hahharr.cardcollection.models.entity.DropChance;
-import ru.hahharr.cardcollection.models.entity.Pack;
+import ru.hahharr.cardcollection.models.orm.CollectionOrm;
+import ru.hahharr.cardcollection.models.orm.DropChanceOrm;
+import ru.hahharr.cardcollection.models.orm.PackOrm;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 import ru.hahharr.cardcollection.repository.interfaces.CollectionRepository;
 import ru.hahharr.cardcollection.repository.interfaces.PackRepository;
-import ru.hahharr.cardcollection.utils.dto.AddPackDto;
+import ru.hahharr.cardcollection.models.dto.AddPackDto;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -37,20 +37,20 @@ public class PackRepoService {
                 addPackDto.getListIds())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Collection collection = collectionRepository.findById(addPackDto.getCollectionId()).get();
+        CollectionOrm collectionOrm = collectionRepository.findById(addPackDto.getCollectionId()).get();
 
-        Pack newPack = Pack.builder()
+        PackOrm newPackOrm = PackOrm.builder()
                 .name(addPackDto.getPackName())
                 .cost(addPackDto.getCost())
-                .collection(collection)
+                .collectionOrm(collectionOrm)
                 .cards(addPackDto.getListIds())
                 .build();
-        newPack.setDropChance(DropChance.createFromChances(
+        newPackOrm.setDropChanceOrm(DropChanceOrm.createFromChances(
                 addPackDto.getCommonDropChance(),
                 addPackDto.getRareDropChance(),
                 addPackDto.getEpicDropChance(),
-                newPack));
-        packRepository.save(newPack);
+                newPackOrm));
+        packRepository.save(newPackOrm);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

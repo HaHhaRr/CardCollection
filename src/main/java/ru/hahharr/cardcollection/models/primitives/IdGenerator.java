@@ -1,9 +1,9 @@
 package ru.hahharr.cardcollection.models.primitives;
 
-import ru.hahharr.cardcollection.models.entity.Card;
-import ru.hahharr.cardcollection.models.entity.Collection;
-import ru.hahharr.cardcollection.models.entity.Pack;
-import ru.hahharr.cardcollection.models.entity.User;
+import ru.hahharr.cardcollection.models.orm.CardOrm;
+import ru.hahharr.cardcollection.models.orm.CollectionOrm;
+import ru.hahharr.cardcollection.models.orm.PackOrm;
+import ru.hahharr.cardcollection.models.orm.UserOrm;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 import ru.hahharr.cardcollection.models.primitives.id.PackId;
@@ -27,19 +27,19 @@ public class IdGenerator extends SequenceStyleGenerator {
     @Override
     public Object generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
         return switch (object) {
-            case User user -> {
+            case UserOrm userOrm -> {
                 Long id = jdbcTemplate.queryForObject("select count (*) from users", Long.class);
                 yield new UserId(id + 1);
             }
-            case Card card -> {
+            case CardOrm cardOrm -> {
                 Long id = jdbcTemplate.queryForObject("select count (*) from card", Long.class);
                 yield new CardId(id + 1);
             }
-            case Collection collection -> {
+            case CollectionOrm collectionOrm -> {
                 Long id = jdbcTemplate.queryForObject("select count (*) from collection", Long.class);
                 yield new CollectionId(id + 1);
             }
-            case Pack pack -> {
+            case PackOrm packOrm -> {
                 Long id = jdbcTemplate.queryForObject("select count (*) from pack", Long.class);
                 yield new PackId(id + 1);
             }

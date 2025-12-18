@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.entity.User;
+import ru.hahharr.cardcollection.models.orm.UserOrm;
 import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
 
 import java.util.Optional;
@@ -18,7 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<UserOrm> user = userRepository.findByUsername(username);
         return user
                 .map(CustomUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));

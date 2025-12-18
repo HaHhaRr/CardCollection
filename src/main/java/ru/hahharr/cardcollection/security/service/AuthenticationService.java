@@ -12,17 +12,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hahharr.cardcollection.models.entity.User;
+import ru.hahharr.cardcollection.models.orm.UserCoinStateOrm;
+import ru.hahharr.cardcollection.models.orm.UserCollectionOrm;
+import ru.hahharr.cardcollection.models.orm.UserOrm;
 import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
 import ru.hahharr.cardcollection.security.Role;
-import ru.hahharr.cardcollection.utils.dto.LoginRequestDto;
-import ru.hahharr.cardcollection.utils.dto.TokenResponseDto;
+import ru.hahharr.cardcollection.models.dto.LoginRequestDto;
+import ru.hahharr.cardcollection.models.dto.TokenResponseDto;
 import ru.hahharr.cardcollection.security.jwt.JwtService;
 import ru.hahharr.cardcollection.security.user.details.CustomUserDetailService;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 
 @Service
 public class AuthenticationService {
 
-    public static final String BEARER_PREFIX = "Bearer ";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final int INITIAL_NUMBER_OF_COINS = 5000;
 
     @Value("${security.jwt.refresh_token_expiration}")
     private long refreshTokenExpiration;
@@ -43,13 +51,22 @@ public class AuthenticationService {
     private CustomUserDetailService customUserDetailService;
 
     public HttpStatus register(LoginRequestDto request) {
-        User user = new User();
+        UserOrm userOrm = new UserOrm(
+                request.getUsername(),
+                passwordEncoder.encode(request.getPassword()),
+                Role.ROLE_USER);
 
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.ROLE_USER);
+        userOrm.setUserCoinStateOrm(new UserCoinStateOrm(
+                INITIAL_NUMBER_OF_COINS,
+                true,
+                LocalDateTime.now(ZoneId.of("Europe/Moscow")),
+                userOrm));
 
-        userRepository.save(user);
+        userOrm.setUserCollectionOrm(new UserCollectionOrm(
+                userOrm,
+                new ArrayList<>()));
+
+        userRepository.save(userOrm);
 
         return HttpStatus.OK;
     }
