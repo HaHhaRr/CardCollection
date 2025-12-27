@@ -11,14 +11,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.entity.User;
+import ru.hahharr.cardcollection.models.dto.LoginRequestDto;
+import ru.hahharr.cardcollection.models.dto.TokenResponseDto;
 import ru.hahharr.cardcollection.models.orm.UserCoinStateOrm;
 import ru.hahharr.cardcollection.models.orm.UserCollectionOrm;
 import ru.hahharr.cardcollection.models.orm.UserOrm;
 import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
 import ru.hahharr.cardcollection.security.Role;
-import ru.hahharr.cardcollection.models.dto.LoginRequestDto;
-import ru.hahharr.cardcollection.models.dto.TokenResponseDto;
 import ru.hahharr.cardcollection.security.jwt.JwtService;
 import ru.hahharr.cardcollection.security.user.details.CustomUserDetailService;
 
