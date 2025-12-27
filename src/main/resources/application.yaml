@@ -3,7 +3,7 @@ server:
 
 spring:
   config:
-    import: optional:values.properties
+    import: values.properties
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

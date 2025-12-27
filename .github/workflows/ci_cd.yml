@@ -20,7 +20,6 @@ jobs:
         with:
           java-version: '24'
           distribution: 'temurin'
-          cache: 'maven'
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
@@ -29,7 +28,7 @@ jobs:
         run: mvn checkstyle:check
 
       - name: test
-        run: mvn -B verify --file pom.xml
+        run: mvn --batch-mode --update-snapshots verify
 
   deploy:
     needs: [ build ]
