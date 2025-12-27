@@ -29,6 +29,19 @@ jobs:
         run: mvn checkstyle:check
 
       - name: test
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          POSTGRES_URL: jdbc:postgresql://localhost:5432/testdb
+          POSTGRES_USERNAME: postgres
+          POSTGRES_PASSWORD: postgres
+          JWT_SECRET_KEY: 5fdbf80a06d57a9f315059c0f7ff523fa628ed603b70fae9d1258db7f36ae6ea93b61339
+          JWT_ACCESS_TOKEN_EXPIRATION: 10000
+          JWT_REFRESH_TOKEN_EXPIRATION: 1000000000000
+          AWS_ACCESS_KEY_ID: RjkgfEI3fdb
+          AWS_SECRET_ACCESS_KEY: 807a7ffb10b53fa6b5de42f0
+          AWS_REGION: ru-central1-a
+          AWS_ENDPOINT: https://storage.yandexcloud.net
+          AWS_BUCKET_NAME: name
         run: mvn test
 
   deploy:
