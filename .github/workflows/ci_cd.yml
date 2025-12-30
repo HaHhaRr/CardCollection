@@ -22,8 +22,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-#      - name: Build with Maven
-#        run: mvn clean package -DskipTests
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
 
       - name: Run Maven Checkstyle goal
         run: mvn checkstyle:check
