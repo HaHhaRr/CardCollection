@@ -91,12 +91,7 @@ jobs:
             
             echo "Starting new container..."
             cd ${{ secrets.REMOTE_PATH }}
-            
-            if [ -f db.env ]; then
-            export $(grep -v '^#' db.env | xargs)
-            fi
-      
             sudo docker compose up --build -d
             
             echo "Cleaning up old images..."
-            sudo docker image prune -f
+            sudo docker container prune -f

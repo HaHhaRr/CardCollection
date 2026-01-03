@@ -1,5 +1,5 @@
-FROM eclipse-temurin:21-jre-alpine-3.23
+FROM eclipse-temurin:24-jre
 WORKDIR /app
-COPY *.jar app/cardCollection.jar
+COPY *.jar /app/cardCollection.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "cardCollection.jar"]
