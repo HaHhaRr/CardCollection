@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hahharr.cardcollection.models.entity.User;
+import ru.hahharr.cardcollection.models.orm.UserOrm;
 import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
-import ru.hahharr.cardcollection.utils.dto.LoginRequestDto;
-import ru.hahharr.cardcollection.utils.dto.TokenResponseDto;
+import ru.hahharr.cardcollection.models.dto.LoginRequestDto;
+import ru.hahharr.cardcollection.models.dto.TokenResponseDto;
 import ru.hahharr.cardcollection.security.service.AuthenticationService;
 
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class AuthenticationController {
 
     @PostMapping("/registration")
     public HttpStatus register(@RequestBody LoginRequestDto registrationDto) {
-        Optional<User> user = userRepository.findByUsername(registrationDto.getUsername());
+        Optional<UserOrm> user = userRepository.findByUsername(registrationDto.getUsername());
 
         if (user.isPresent()) {
             return HttpStatus.BAD_REQUEST;

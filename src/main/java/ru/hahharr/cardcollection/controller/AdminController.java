@@ -15,7 +15,7 @@ import ru.hahharr.cardcollection.repository.services.CardRepoService;
 import ru.hahharr.cardcollection.repository.services.CollectionRepoService;
 import ru.hahharr.cardcollection.repository.services.PackRepoService;
 import ru.hahharr.cardcollection.s3.S3Service;
-import ru.hahharr.cardcollection.utils.dto.AddPackDto;
+import ru.hahharr.cardcollection.models.dto.AddPackDto;
 
 import java.io.IOException;
 
@@ -56,3 +56,13 @@ public class AdminController {
         return packRepoService.saveNewPack(addPackDto);
     }
 }
+
+//{
+//        "packName" : "1",
+//        "collectionId" : "2",
+//        "cost" : "5000",
+//        "epicDropChance" : "10",
+//        "rareDropChance" : "30",
+//        "commonDropChance" : "60",
+//        "listIds" : [6, 7]
+//        }
