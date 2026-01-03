@@ -11,6 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -88,6 +89,11 @@ jobs:
             
             echo "Starting new container..."
             cd ${{ secrets.REMOTE_PATH }}
+            
+            if [ -f db.env ]; then
+            export $(grep -v '^#' db.env | xargs)
+            fi
+      
             sudo docker compose up --build -d
             
             echo "Cleaning up old images..."
