@@ -1,6 +1,5 @@
 package ru.hahharr.cardcollection.models.orm;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,11 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.hahharr.cardcollection.models.primitives.CustomId;
-import ru.hahharr.cardcollection.utils.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
+import ru.hahharr.cardcollection.utils.JsonReference;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 
 @Entity

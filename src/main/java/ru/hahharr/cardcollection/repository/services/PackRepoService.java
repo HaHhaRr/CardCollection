@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.orm.CardOrm;
+import ru.hahharr.cardcollection.models.dto.AddPackDto;
 import ru.hahharr.cardcollection.models.orm.CollectionOrm;
 import ru.hahharr.cardcollection.models.orm.DropChanceOrm;
 import ru.hahharr.cardcollection.models.orm.PackOrm;
@@ -13,14 +13,12 @@ import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 import ru.hahharr.cardcollection.repository.interfaces.CardRepository;
 import ru.hahharr.cardcollection.repository.interfaces.CollectionRepository;
 import ru.hahharr.cardcollection.repository.interfaces.PackRepository;
-import ru.hahharr.cardcollection.models.dto.AddPackDto;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class PackRepoService {

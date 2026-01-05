@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 import ru.hahharr.cardcollection.models.orm.CardOrm;
 import ru.hahharr.cardcollection.models.orm.CollectionOrm;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
-import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 
-import java.util.List;
 import java.util.Set;
 
 @Repository
