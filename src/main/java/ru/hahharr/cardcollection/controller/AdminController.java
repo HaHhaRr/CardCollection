@@ -57,12 +57,3 @@ public class AdminController {
     }
 }
 
-//{
-//        "packName" : "1",
-//        "collectionId" : "2",
-//        "cost" : "5000",
-//        "epicDropChance" : "10",
-//        "rareDropChance" : "30",
-//        "commonDropChance" : "60",
-//        "listIds" : [6, 7]
-//        }

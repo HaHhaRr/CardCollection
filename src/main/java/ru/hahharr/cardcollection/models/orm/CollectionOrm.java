@@ -15,8 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.hahharr.cardcollection.models.primitives.CustomId;
-import ru.hahharr.cardcollection.utils.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
+import ru.hahharr.cardcollection.utils.JsonReference;
 
 import java.util.List;
 

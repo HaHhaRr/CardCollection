@@ -14,10 +14,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.hahharr.cardcollection.utils.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.PackId;
-
-import java.io.IOException;
+import ru.hahharr.cardcollection.utils.JsonReference;
 
 @Entity
 @Builder
@@ -60,7 +58,7 @@ public class DropChanceOrm {
     public static DropChanceOrm createFromChances(int commonDropChance,
                                                   int rareDropChance,
                                                   int epicDropChance,
-                                                  PackOrm packOrm) throws IOException {
+                                                  PackOrm packOrm) {
 
         if (epicDropChance < 0
                 || rareDropChance < 0
@@ -68,7 +66,7 @@ public class DropChanceOrm {
                 || epicDropChance >= rareDropChance
                 || rareDropChance >= commonDropChance
                 || (epicDropChance + rareDropChance + commonDropChance) > 100) {
-            throw new IOException(WRONG_DROP_CHANCE_MESSAGE);
+            throw new IllegalArgumentException(WRONG_DROP_CHANCE_MESSAGE);
         }
         return new DropChanceOrm(commonDropChance, rareDropChance, epicDropChance, packOrm);
     }
