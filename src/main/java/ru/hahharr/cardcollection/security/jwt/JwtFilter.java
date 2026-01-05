@@ -46,8 +46,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         String token = authHeader.substring(BEARER_PREFIX.length());
 
-        if (jwtService.getExpirationTime(token) != accessTokenExpiration
-                && !request.getRequestURI().equals(REFRESH_TOKEN_URI)) {
+        if (jwtService.getExpirationTime(token) != accessTokenExpiration &&
+                !request.getRequestURI().equals(REFRESH_TOKEN_URI)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(WRONG_TOKEN);
             return;
