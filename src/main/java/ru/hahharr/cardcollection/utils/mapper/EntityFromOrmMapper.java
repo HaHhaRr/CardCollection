@@ -18,10 +18,16 @@ import ru.hahharr.cardcollection.models.orm.UserOrm;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.PackId;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
 public class EntityFromOrmMapper {
+
+    private static final int HOURS_TO_FREE_COINS = 6;
 
     public static Card mapCard(CardOrm cardOrm) {
         return new Card(cardOrm.getId(),
@@ -71,10 +77,24 @@ public class EntityFromOrmMapper {
     }
 
     public static UserCoinState mapUserCoinState(UserCoinStateOrm userCoinStateOrm) {
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Moscow"));
+        LocalDateTime lastReceived = userCoinStateOrm.getLastReceived();
+        Duration duration = Duration.between(lastReceived, now);
+
+        boolean availableFree = true;
+        LocalTime localTime = LocalTime.of(HOURS_TO_FREE_COINS, 0, 0);
+
+        if (duration.toHours() < HOURS_TO_FREE_COINS) {
+            availableFree = false;
+            localTime = LocalTime.of(5 - (int) duration.toHours() % 24,
+                    59 - (int) duration.toMinutes() % 60,
+                    59 - (int) duration.toSeconds() % 60);
+        }
+
         return new UserCoinState(userCoinStateOrm.getId(),
                 userCoinStateOrm.getTotalCoins(),
-                userCoinStateOrm.isAvailableFree(),
-                userCoinStateOrm.getLastReceived());
+                availableFree,
+                localTime);
     }
 
     public static UserCollection mapUserCollection(UserCollectionOrm userCollectionOrm) {

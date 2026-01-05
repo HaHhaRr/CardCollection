@@ -36,9 +36,6 @@ public class UserCoinStateOrm {
     @Column(name = "totalCoins", nullable = false)
     private int totalCoins;
 
-    @Column(name = "available", nullable = false)
-    private boolean availableFree;
-
     @Column(name = "lastReceived", nullable = false)
     private LocalDateTime lastReceived;
 
@@ -48,9 +45,8 @@ public class UserCoinStateOrm {
     @JoinColumn(name = "user_id")
     private UserOrm userOrm;
 
-    public UserCoinStateOrm(int totalCoins, boolean availableFree, LocalDateTime lastReceived, UserOrm userOrm) {
+    public UserCoinStateOrm(int totalCoins, LocalDateTime lastReceived, UserOrm userOrm) {
         this.totalCoins = totalCoins;
-        this.availableFree = availableFree;
         this.lastReceived = lastReceived;
         this.userOrm = userOrm;
     }

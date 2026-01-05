@@ -57,7 +57,6 @@ public class AuthenticationService {
 
         userOrm.setUserCoinStateOrm(new UserCoinStateOrm(
                 INITIAL_NUMBER_OF_COINS,
-                true,
                 LocalDateTime.now(ZoneId.of("Europe/Moscow")),
                 userOrm));
 
