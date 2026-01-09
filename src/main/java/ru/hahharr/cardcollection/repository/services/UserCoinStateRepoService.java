@@ -11,8 +11,6 @@ import ru.hahharr.cardcollection.repository.interfaces.UserCoinStateRepository;
 import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
 import ru.hahharr.cardcollection.utils.provider.LocalDateTimeProvider;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Optional;
 
 @Service

@@ -21,8 +21,6 @@ import ru.hahharr.cardcollection.utils.provider.LocalDateTimeProvider;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -83,7 +81,7 @@ public class EntityFromOrmMapper {
         Duration duration = Duration.between(lastReceived, now);
 
         boolean availableFree = true;
-        LocalDateTime localTime = LocalDateTime.of(1,1,1,1,1);
+        LocalDateTime localTime = LocalDateTime.of(1, 1, 1, 1, 1);
 
         if (duration.compareTo(Duration.ofHours(HOURS_TO_FREE_COINS)) < 0) {
             availableFree = false;

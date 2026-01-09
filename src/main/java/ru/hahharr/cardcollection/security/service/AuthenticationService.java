@@ -22,8 +22,6 @@ import ru.hahharr.cardcollection.security.jwt.JwtService;
 import ru.hahharr.cardcollection.security.user.details.CustomUserDetailService;
 import ru.hahharr.cardcollection.utils.provider.LocalDateTimeProvider;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collections;
 
 @Service
