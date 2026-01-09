@@ -17,6 +17,7 @@ import ru.hahharr.cardcollection.models.orm.UserCollectionOrm;
 import ru.hahharr.cardcollection.models.orm.UserOrm;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.PackId;
+import ru.hahharr.cardcollection.utils.provider.LocalDateTimeProvider;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -77,18 +78,16 @@ public class EntityFromOrmMapper {
     }
 
     public static UserCoinState mapUserCoinState(UserCoinStateOrm userCoinStateOrm) {
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Moscow"));
+        LocalDateTime now = LocalDateTimeProvider.moscow();
         LocalDateTime lastReceived = userCoinStateOrm.getLastReceived();
         Duration duration = Duration.between(lastReceived, now);
 
         boolean availableFree = true;
-        LocalTime localTime = LocalTime.of(HOURS_TO_FREE_COINS, 0, 0);
+        LocalDateTime localTime = LocalDateTime.of(1,1,1,1,1);
 
-        if (duration.toHours() < HOURS_TO_FREE_COINS) {
+        if (duration.compareTo(Duration.ofHours(HOURS_TO_FREE_COINS)) < 0) {
             availableFree = false;
-            localTime = LocalTime.of(5 - (int) duration.toHours() % 24,
-                    59 - (int) duration.toMinutes() % 60,
-                    59 - (int) duration.toSeconds() % 60);
+            localTime = lastReceived.plus(Duration.ofHours(HOURS_TO_FREE_COINS));
         }
 
         return new UserCoinState(userCoinStateOrm.getId(),

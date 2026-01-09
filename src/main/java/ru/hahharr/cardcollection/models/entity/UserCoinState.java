@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -16,5 +16,5 @@ public class UserCoinState {
 
     private boolean availableFree;
 
-    private LocalTime freeCoinsTimeLeft;
+    private LocalDateTime freeCoinsTime;
 }

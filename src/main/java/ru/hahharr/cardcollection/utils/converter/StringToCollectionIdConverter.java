@@ -1,4 +1,4 @@
-package ru.hahharr.cardcollection.utils.converters;
+package ru.hahharr.cardcollection.utils.converter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

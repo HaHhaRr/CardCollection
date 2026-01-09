@@ -9,6 +9,7 @@ import ru.hahharr.cardcollection.models.orm.UserCoinStateOrm;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 import ru.hahharr.cardcollection.repository.interfaces.UserCoinStateRepository;
 import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
+import ru.hahharr.cardcollection.utils.provider.LocalDateTimeProvider;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -23,24 +24,26 @@ public class UserCoinStateRepoService {
     private UserCoinStateRepository userCoinStateRepository;
 
     public ResponseEntity<UserCoinState> getById(UserId userId) {
-        Optional<UserCoinStateOrm> userCoinStateOrm = userCoinStateRepository.findById(userId);
-        return userCoinStateOrm
+        Optional<UserCoinStateOrm> userCoinStateOrmOptional = userCoinStateRepository.findById(userId);
+        return userCoinStateOrmOptional
                 .map(coinStateOrm ->
                         new ResponseEntity<>(EntityFromOrmMapper.mapUserCoinState(coinStateOrm), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     public ResponseEntity<HttpStatus> addFreeCoins(UserId userId) {
         Optional<UserCoinStateOrm> userCoinStateOrmOptional = userCoinStateRepository.findById(userId);
-        UserCoinState userCoinState = userCoinStateOrmOptional
-                .map(EntityFromOrmMapper::mapUserCoinState)
-                .orElseThrow(IllegalStateException::new);
+
+        if (userCoinStateOrmOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         UserCoinStateOrm userCoinStateOrm = userCoinStateOrmOptional.get();
+        UserCoinState userCoinState = EntityFromOrmMapper.mapUserCoinState(userCoinStateOrm);
 
         if (userCoinState.isAvailableFree()) {
             userCoinStateOrm.setTotalCoins(userCoinState.getTotalCoins() + FREE_COINS_VALUE);
-            userCoinStateOrm.setLastReceived(LocalDateTime.now(ZoneId.of("Europe/Moscow")));
+            userCoinStateOrm.setLastReceived(LocalDateTimeProvider.moscow());
             userCoinStateRepository.save(userCoinStateOrm);
             return new ResponseEntity<>(HttpStatus.OK);
         }
