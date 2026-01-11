@@ -42,7 +42,12 @@ public class UserCoinStateRepoService {
         if (userCoinState.isAvailableFree()) {
             userCoinStateOrm.setTotalCoins(userCoinState.getTotalCoins() + FREE_COINS_VALUE);
             userCoinStateOrm.setLastReceived(LocalDateTimeProvider.moscow());
-            userCoinStateRepository.save(userCoinStateOrm);
+
+            try {
+                userCoinStateRepository.save(userCoinStateOrm);
+            } catch (RuntimeException runtimeException) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
