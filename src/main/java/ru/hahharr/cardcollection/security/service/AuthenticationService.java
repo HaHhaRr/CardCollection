@@ -20,9 +20,8 @@ import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
 import ru.hahharr.cardcollection.security.Role;
 import ru.hahharr.cardcollection.security.jwt.JwtService;
 import ru.hahharr.cardcollection.security.user.details.CustomUserDetailService;
+import ru.hahharr.cardcollection.utils.provider.LocalDateTimeProvider;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collections;
 
 @Service
@@ -57,8 +56,7 @@ public class AuthenticationService {
 
         userOrm.setUserCoinStateOrm(new UserCoinStateOrm(
                 INITIAL_NUMBER_OF_COINS,
-                true,
-                LocalDateTime.now(ZoneId.of("Europe/Moscow")),
+                LocalDateTimeProvider.moscow(),
                 userOrm));
 
         userOrm.setUserCollectionOrm(new UserCollectionOrm(

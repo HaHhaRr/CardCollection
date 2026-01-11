@@ -27,7 +27,7 @@ public class CardRepoService {
 
         Optional<CollectionOrm> collection = collectionRepository.findById(collectionId);
         if (collection.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         CardOrm newCardOrm = new CardOrm(
                 cardName,

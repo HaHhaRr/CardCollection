@@ -16,5 +16,5 @@ public class UserCoinState {
 
     private boolean availableFree;
 
-    private LocalDateTime lastReceived;
+    private LocalDateTime freeCoinsTime;
 }

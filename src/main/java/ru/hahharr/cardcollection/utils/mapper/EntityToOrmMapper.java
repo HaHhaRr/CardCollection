@@ -16,6 +16,7 @@ import ru.hahharr.cardcollection.models.orm.UserCoinStateOrm;
 import ru.hahharr.cardcollection.models.orm.UserCollectionOrm;
 import ru.hahharr.cardcollection.models.orm.UserOrm;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -62,11 +63,10 @@ public class EntityToOrmMapper {
                 userCoinStateOrm);
     }
 
-    public static UserCoinStateOrm mapUserCoinState(UserCoinState userCoinState, UserOrm userOrm) {
+    public static UserCoinStateOrm mapUserCoinState(UserCoinState userCoinState, UserOrm userOrm, LocalDateTime now) {
         return new UserCoinStateOrm(userCoinState.getId(),
                 userCoinState.getTotalCoins(),
-                userCoinState.isAvailableFree(),
-                userCoinState.getLastReceived(),
+                now,
                 userOrm);
     }
 
