@@ -1,20 +1,28 @@
 package ru.hahharr.cardcollection.repository.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.dto.AddPackDto;
+import ru.hahharr.cardcollection.models.dto.AddPackRequestDto;
+import ru.hahharr.cardcollection.models.dto.CardListResponseDto;
+import ru.hahharr.cardcollection.models.dto.PackViewResponseDto;
+import ru.hahharr.cardcollection.models.entity.Pack;
+import ru.hahharr.cardcollection.models.orm.CardOrm;
 import ru.hahharr.cardcollection.models.orm.CollectionOrm;
 import ru.hahharr.cardcollection.models.orm.DropChanceOrm;
 import ru.hahharr.cardcollection.models.orm.PackOrm;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
+import ru.hahharr.cardcollection.models.primitives.id.PackId;
 import ru.hahharr.cardcollection.repository.interfaces.CardRepository;
 import ru.hahharr.cardcollection.repository.interfaces.CollectionRepository;
 import ru.hahharr.cardcollection.repository.interfaces.PackRepository;
+import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
+import ru.hahharr.cardcollection.utils.mapper.EntityToViewMapper;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -32,28 +40,60 @@ public class PackRepoService {
     @Autowired
     private CardRepository cardRepository;
 
-    public ResponseEntity<HttpStatus> saveNewPack(AddPackDto addPackDto) throws IOException {
+    public ResponseEntity<HttpStatus> saveNewPack(AddPackRequestDto addPackRequestDto) {
 
-        if (isValidParam(addPackDto.getCollectionId(),
-                addPackDto.getCost(),
-                addPackDto.getListIds())) {
+        if (isValidParam(addPackRequestDto.getCollectionId(),
+                addPackRequestDto.getCost(),
+                addPackRequestDto.getListIds())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        CollectionOrm collectionOrm = collectionRepository.findById(addPackDto.getCollectionId()).get();
+        CollectionOrm collectionOrm = collectionRepository.findById(addPackRequestDto.getCollectionId()).get();
 
-        PackOrm newPackOrm = new PackOrm(addPackDto.getPackName(),
-                addPackDto.getCost(),
-                addPackDto.getListIds(),
+        PackOrm newPackOrm = new PackOrm(addPackRequestDto.getPackName(),
+                addPackRequestDto.getCost(),
+                addPackRequestDto.getListIds(),
                 collectionOrm);
 
         newPackOrm.setDropChanceOrm(DropChanceOrm.createFromChances(
-                addPackDto.getCommonDropChance(),
-                addPackDto.getRareDropChance(),
-                addPackDto.getEpicDropChance(),
+                addPackRequestDto.getCommonDropChance(),
+                addPackRequestDto.getRareDropChance(),
+                addPackRequestDto.getEpicDropChance(),
                 newPackOrm));
         packRepository.save(newPackOrm);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<PackViewResponseDto> getPagePackView(int page, int size) {
+        Page<PackOrm> packOrmPage = packRepository.findAll(PageRequest.of(page, size));
+        PackViewResponseDto packViewResponseDto = new PackViewResponseDto(
+                packOrmPage
+                        .map(EntityFromOrmMapper::mapPack)
+                        .map(EntityToViewMapper::mapPack)
+                        .stream()
+                        .toList(), packOrmPage.getTotalPages());
+        return new ResponseEntity<>(packViewResponseDto, HttpStatus.OK);
+    }
+
+    public ResponseEntity<CardListResponseDto> getCardsFromPack(PackId packId, int page, int size) {
+        try {
+            Pack pack = getPack(packId);
+            Page<CardOrm> cardListPage = cardRepository.findByIdIn(pack.getCardIdList(), PageRequest.of(page, size));
+            CardListResponseDto cardListResponseDto = new CardListResponseDto(
+                    cardListPage.stream()
+                            .map(EntityFromOrmMapper::mapCard)
+                            .toList(), cardListPage.getTotalPages());
+
+            return new ResponseEntity<>(cardListResponseDto, HttpStatus.OK);
+        } catch (NullPointerException nullPointerException) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public Pack getPack(PackId packId) throws NullPointerException {
+        Optional<PackOrm> packOrm = packRepository.findById(packId);
+        return packOrm.map(EntityFromOrmMapper::mapPack)
+                .orElseThrow(NullPointerException::new);
     }
 
     private boolean isValidParam(CollectionId collectionId, int cost, List<CardId> listIds) {

@@ -7,7 +7,7 @@ import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 import java.util.List;
 
 @Data
-public class AddPackDto {
+public class AddPackRequestDto {
     private String packName;
 
     private CollectionId collectionId;

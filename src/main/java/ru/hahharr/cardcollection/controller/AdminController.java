@@ -15,7 +15,7 @@ import ru.hahharr.cardcollection.repository.services.CardRepoService;
 import ru.hahharr.cardcollection.repository.services.CollectionRepoService;
 import ru.hahharr.cardcollection.repository.services.PackRepoService;
 import ru.hahharr.cardcollection.s3.S3Service;
-import ru.hahharr.cardcollection.models.dto.AddPackDto;
+import ru.hahharr.cardcollection.models.dto.AddPackRequestDto;
 
 import java.io.IOException;
 
@@ -52,8 +52,8 @@ public class AdminController {
     }
 
     @PostMapping("/addPack")
-    public ResponseEntity<HttpStatus> addPack(@RequestBody AddPackDto addPackDto) throws IOException {
-        return packRepoService.saveNewPack(addPackDto);
+    public ResponseEntity<HttpStatus> addPack(@RequestBody AddPackRequestDto addPackRequestDto) throws IOException {
+        return packRepoService.saveNewPack(addPackRequestDto);
     }
 }
 

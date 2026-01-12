@@ -1,10 +1,10 @@
 package ru.hahharr.cardcollection.models.view;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@Builder
+@AllArgsConstructor
 public class CollectionView {
 
     private Long collectionId;

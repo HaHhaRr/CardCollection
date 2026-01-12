@@ -23,7 +23,7 @@ public class JwtFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
     public static final String WRONG_TOKEN = "Not access token";
-    public static final String REFRESH_TOKEN_URI = "/refresh_token";
+    public static final String REFRESH_TOKEN_URI = "/authentication/refresh_token";
 
     @Value("${security.jwt.access_token_expiration}")
     private long accessTokenExpiration;

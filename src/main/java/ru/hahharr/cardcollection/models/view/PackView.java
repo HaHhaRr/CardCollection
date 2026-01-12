@@ -1,11 +1,10 @@
 package ru.hahharr.cardcollection.models.view;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 
 @Data
-@Builder
+@AllArgsConstructor
 public class PackView {
 
     private Long packId;
@@ -14,5 +13,5 @@ public class PackView {
 
     private int cost;
 
-    private CollectionId collectionId;
+    private Long collectionId;
 }
