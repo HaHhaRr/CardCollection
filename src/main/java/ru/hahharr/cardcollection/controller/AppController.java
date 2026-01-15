@@ -46,7 +46,7 @@ public class AppController {
 
     @GetMapping("/userState")
     public ResponseEntity<UserCoinState> getUserState(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        return userCoinStateRepoService.getById(userDetails.getUser().getId());
+        return userCoinStateRepoService.getUserState(userDetails.getUser().getId());
     }
 
     @PutMapping("/actions/get_free_coins")
@@ -55,52 +55,48 @@ public class AppController {
     }
 
     @GetMapping("/packs")
-    public ResponseEntity<PackViewResponseDto> getAllPacks(@RequestParam("page") int page,
-                                                           @RequestParam("size") int size) {
-        return packRepoService.getPagePackView(page, size);
+    public ResponseEntity<PackViewResponseDto> getAllPacks(@RequestParam("offset") int offset,
+                                                           @RequestParam("limit") int limit) {
+        return packRepoService.getAllPacks(offset, limit);
     }
 
     @GetMapping("/pack/{id}")
     public ResponseEntity<CardListResponseDto> getCardsFromPack(@PathVariable("id") PackId packId,
-                                                                @RequestParam("page") int page,
-                                                                @RequestParam("size") int size) {
-        return packRepoService.getCardsFromPack(packId, page, size);
+                                                                @RequestParam("offset") int offset,
+                                                                @RequestParam("limit") int limit) {
+        return packRepoService.getCardsFromPack(packId, offset, limit);
     }
 
     @GetMapping("/cards/{id}")
     public ResponseEntity<Card> getCardById(@PathVariable("id") CardId cardId) {
-        try {
-            return new ResponseEntity<>(cardRepoService.getCard(cardId), HttpStatus.OK);
-        } catch (NullPointerException nullPointerException) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return cardRepoService.getCardById(cardId);
     }
 
     @GetMapping("/collections/{id}")
     public ResponseEntity<CardListResponseDto> getCardsFromCollection(@PathVariable("id") CollectionId collectionId,
-                                                                      @RequestParam("page") int page,
-                                                                      @RequestParam("size") int size) {
-        return collectionRepoService.getCardsFromCollection(collectionId, page, size);
+                                                                      @RequestParam("offset") int offset,
+                                                                      @RequestParam("limit") int limit) {
+        return collectionRepoService.getCardsFromCollection(collectionId, offset, limit);
     }
 
     @GetMapping("/packs/{id}")
     public ResponseEntity<PackViewResponseDto> getPacksFromCollection(@PathVariable("id") CollectionId collectionId,
-                                                                      @RequestParam("page") int page,
-                                                                      @RequestParam("size") int size) {
-        return collectionRepoService.getPacksFromCollection(collectionId, page, size);
+                                                                      @RequestParam("offset") int offset,
+                                                                      @RequestParam("limit") int limit) {
+        return collectionRepoService.getPacksFromCollection(collectionId, offset, limit);
     }
 
     @GetMapping("/collections")
-    public ResponseEntity<CollectionViewResponseDto> getAllCollections(@RequestParam("page") int page,
-                                                                       @RequestParam("size") int size) {
-        return collectionRepoService.getPageCollectionView(page, size);
+    public ResponseEntity<CollectionViewResponseDto> getAllCollections(@RequestParam("offset") int offset,
+                                                                       @RequestParam("limit") int limit) {
+        return collectionRepoService.getAllCollections(offset, limit);
     }
 
     @GetMapping("/user_collection")
     public ResponseEntity<CardListResponseDto> getUserCollection(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam("page") int page,
-            @RequestParam("size") int size) {
-        return userCollectionRepoService.getUserCards(userDetails.getUser().getId(), page, size);
+            @RequestParam("offset") int offset,
+            @RequestParam("limit") int limit) {
+        return userCollectionRepoService.getUserCollection(userDetails.getUser().getId(), offset, limit);
     }
 }

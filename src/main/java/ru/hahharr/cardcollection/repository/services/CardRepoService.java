@@ -42,10 +42,14 @@ public class CardRepoService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public Card getCard(CardId cardId) throws NullPointerException {
-        Optional<CardOrm> cardOrm = cardRepository.findById(cardId);
-        return cardOrm.map(EntityFromOrmMapper::mapCard)
-                .orElseThrow(NullPointerException::new);
+    public ResponseEntity<Card> getCardById(CardId cardId) {
+        Optional<CardOrm> cardOrm = getCard(cardId);
+        return cardOrm.map(orm -> new ResponseEntity<>(EntityFromOrmMapper.mapCard(orm), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    private Optional<CardOrm> getCard(CardId cardId) {
+        return cardRepository.findById(cardId);
     }
 
     public long countAllRows() {

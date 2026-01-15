@@ -2,7 +2,6 @@ package ru.hahharr.cardcollection.repository.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,10 @@ import ru.hahharr.cardcollection.models.primitives.id.PackId;
 import ru.hahharr.cardcollection.repository.interfaces.CardRepository;
 import ru.hahharr.cardcollection.repository.interfaces.CollectionRepository;
 import ru.hahharr.cardcollection.repository.interfaces.PackRepository;
+import ru.hahharr.cardcollection.utils.OffsetLimitPage;
 import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
 import ru.hahharr.cardcollection.utils.mapper.EntityToViewMapper;
+import ru.hahharr.cardcollection.utils.mapper.ViewFromOrmMapper;
 
 import java.util.HashSet;
 import java.util.List;
@@ -64,36 +65,34 @@ public class PackRepoService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<PackViewResponseDto> getPagePackView(int page, int size) {
-        Page<PackOrm> packOrmPage = packRepository.findAll(PageRequest.of(page, size));
+    public ResponseEntity<PackViewResponseDto> getAllPacks(int offset, int limit) {
+        Page<PackOrm> packOrmPage = packRepository.findAll(OffsetLimitPage.of(offset, limit));
         PackViewResponseDto packViewResponseDto = new PackViewResponseDto(
                 packOrmPage
-                        .map(EntityFromOrmMapper::mapPack)
-                        .map(EntityToViewMapper::mapPack)
+                        .map(ViewFromOrmMapper::mapPack)
                         .stream()
                         .toList(), packOrmPage.getTotalPages());
         return new ResponseEntity<>(packViewResponseDto, HttpStatus.OK);
     }
 
-    public ResponseEntity<CardListResponseDto> getCardsFromPack(PackId packId, int page, int size) {
-        try {
-            Pack pack = getPack(packId);
-            Page<CardOrm> cardListPage = cardRepository.findByIdIn(pack.getCardIdList(), PageRequest.of(page, size));
-            CardListResponseDto cardListResponseDto = new CardListResponseDto(
-                    cardListPage.stream()
-                            .map(EntityFromOrmMapper::mapCard)
-                            .toList(), cardListPage.getTotalPages());
-
-            return new ResponseEntity<>(cardListResponseDto, HttpStatus.OK);
-        } catch (NullPointerException nullPointerException) {
+    public ResponseEntity<CardListResponseDto> getCardsFromPack(PackId packId, int offset, int limit) {
+        Optional<PackOrm> packOrm = getPack(packId);
+        if (packOrm.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        Page<CardOrm> cardListPage = cardRepository.findByIdIn(packOrm.get().getCards(),
+                OffsetLimitPage.of(offset, limit));
+        CardListResponseDto cardListResponseDto = new CardListResponseDto(
+                cardListPage.stream()
+                        .map(EntityFromOrmMapper::mapCard)
+                        .toList(), cardListPage.getTotalPages());
+
+        return new ResponseEntity<>(cardListResponseDto, HttpStatus.OK);
     }
 
-    public Pack getPack(PackId packId) throws NullPointerException {
-        Optional<PackOrm> packOrm = packRepository.findById(packId);
-        return packOrm.map(EntityFromOrmMapper::mapPack)
-                .orElseThrow(NullPointerException::new);
+    private Optional<PackOrm> getPack(PackId packId) {
+        return packRepository.findById(packId);
     }
 
     private boolean isValidParam(CollectionId collectionId, int cost, List<CardId> listIds) {
