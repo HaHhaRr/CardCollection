@@ -64,9 +64,9 @@ public class OffsetLimitPage implements Pageable, Serializable {
     }
 
     private OffsetLimitPage previous() {
-        return hasPrevious() ?
-                new OffsetLimitPage((int) getOffset() - getPageSize(), getPageSize(), getSort()) :
-                this;
+        return hasPrevious()
+                ? new OffsetLimitPage((int) getOffset() - getPageSize(), getPageSize(), getSort())
+                : this;
     }
 
     @Override

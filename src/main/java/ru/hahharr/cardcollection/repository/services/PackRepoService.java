@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import ru.hahharr.cardcollection.models.dto.AddPackRequestDto;
 import ru.hahharr.cardcollection.models.dto.CardListResponseDto;
 import ru.hahharr.cardcollection.models.dto.PackViewResponseDto;
-import ru.hahharr.cardcollection.models.entity.Pack;
 import ru.hahharr.cardcollection.models.orm.CardOrm;
 import ru.hahharr.cardcollection.models.orm.CollectionOrm;
 import ru.hahharr.cardcollection.models.orm.DropChanceOrm;
@@ -21,7 +20,6 @@ import ru.hahharr.cardcollection.repository.interfaces.CollectionRepository;
 import ru.hahharr.cardcollection.repository.interfaces.PackRepository;
 import ru.hahharr.cardcollection.utils.OffsetLimitPage;
 import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
-import ru.hahharr.cardcollection.utils.mapper.EntityToViewMapper;
 import ru.hahharr.cardcollection.utils.mapper.ViewFromOrmMapper;
 
 import java.util.HashSet;

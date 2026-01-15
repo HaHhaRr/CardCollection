@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import ru.hahharr.cardcollection.models.dto.CardListResponseDto;
 import ru.hahharr.cardcollection.models.dto.CollectionViewResponseDto;
 import ru.hahharr.cardcollection.models.dto.PackViewResponseDto;
-import ru.hahharr.cardcollection.models.entity.Collection;
 import ru.hahharr.cardcollection.models.orm.CardOrm;
 import ru.hahharr.cardcollection.models.orm.CollectionOrm;
 import ru.hahharr.cardcollection.models.orm.PackOrm;
@@ -20,7 +19,6 @@ import ru.hahharr.cardcollection.repository.interfaces.CollectionRepository;
 import ru.hahharr.cardcollection.repository.interfaces.PackRepository;
 import ru.hahharr.cardcollection.utils.OffsetLimitPage;
 import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
-import ru.hahharr.cardcollection.utils.mapper.EntityToViewMapper;
 import ru.hahharr.cardcollection.utils.mapper.ViewFromOrmMapper;
 
 import java.util.List;
@@ -60,7 +58,8 @@ public class CollectionRepoService {
         return new ResponseEntity<>(collectionViewResponseDto, HttpStatus.OK);
     }
 
-    public ResponseEntity<PackViewResponseDto> getPacksFromCollection(CollectionId collectionId, int offset, int limit) {
+    public ResponseEntity<PackViewResponseDto> getPacksFromCollection(CollectionId collectionId,
+                                                                      int offset, int limit) {
         Optional<CollectionOrm> collectionOrm = getCollection(collectionId);
         if (collectionOrm.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -79,7 +78,8 @@ public class CollectionRepoService {
 
     }
 
-    public ResponseEntity<CardListResponseDto> getCardsFromCollection(CollectionId collectionId, int offset, int limit) {
+    public ResponseEntity<CardListResponseDto> getCardsFromCollection(CollectionId collectionId,
+                                                                      int offset, int limit) {
         Optional<CollectionOrm> collectionOrm = getCollection(collectionId);
         if (collectionOrm.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
