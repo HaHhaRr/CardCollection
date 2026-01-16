@@ -9,14 +9,11 @@ import ru.hahharr.cardcollection.models.orm.UserCoinStateOrm;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 import ru.hahharr.cardcollection.repository.interfaces.UserCoinStateRepository;
 import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
-import ru.hahharr.cardcollection.utils.provider.LocalDateTimeProvider;
 
 import java.util.Optional;
 
 @Service
 public class UserCoinStateRepoService {
-
-    private static final int FREE_COINS_VALUE = 3000;
 
     @Autowired
     private UserCoinStateRepository userCoinStateRepository;
@@ -29,27 +26,11 @@ public class UserCoinStateRepoService {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    public ResponseEntity<HttpStatus> addFreeCoins(UserId userId) {
-        Optional<UserCoinStateOrm> userCoinStateOrmOptional = userCoinStateRepository.findById(userId);
+    public void save(UserCoinStateOrm userCoinStateOrm) {
+        userCoinStateRepository.save(userCoinStateOrm);
+    }
 
-        if (userCoinStateOrmOptional.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        UserCoinStateOrm userCoinStateOrm = userCoinStateOrmOptional.get();
-        UserCoinState userCoinState = EntityFromOrmMapper.mapUserCoinState(userCoinStateOrm);
-
-        if (userCoinState.isAvailableFree()) {
-            userCoinStateOrm.setTotalCoins(userCoinState.getTotalCoins() + FREE_COINS_VALUE);
-            userCoinStateOrm.setLastReceived(LocalDateTimeProvider.moscow());
-
-            try {
-                userCoinStateRepository.save(userCoinStateOrm);
-            } catch (RuntimeException runtimeException) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public Optional<UserCoinStateOrm> getUserCoinState(UserId userId) {
+        return userCoinStateRepository.findById(userId);
     }
 }

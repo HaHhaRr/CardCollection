@@ -11,8 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.dto.LoginRequestDto;
-import ru.hahharr.cardcollection.models.dto.TokenResponseDto;
+import ru.hahharr.cardcollection.models.dto.request.LoginRequestDto;
+import ru.hahharr.cardcollection.models.dto.response.TokenResponseDto;
 import ru.hahharr.cardcollection.models.orm.UserCoinStateOrm;
 import ru.hahharr.cardcollection.models.orm.UserCollectionOrm;
 import ru.hahharr.cardcollection.models.orm.UserOrm;

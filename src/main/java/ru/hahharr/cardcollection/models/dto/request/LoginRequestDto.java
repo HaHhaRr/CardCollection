@@ -1,4 +1,4 @@
-package ru.hahharr.cardcollection.models.dto;
+package ru.hahharr.cardcollection.models.dto.request;
 
 import lombok.Data;
 

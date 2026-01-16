@@ -15,7 +15,7 @@ import ru.hahharr.cardcollection.repository.services.CardRepoService;
 import ru.hahharr.cardcollection.repository.services.CollectionRepoService;
 import ru.hahharr.cardcollection.repository.services.PackRepoService;
 import ru.hahharr.cardcollection.s3.S3Service;
-import ru.hahharr.cardcollection.models.dto.AddPackRequestDto;
+import ru.hahharr.cardcollection.models.dto.request.AddPackRequestDto;
 
 import java.io.IOException;
 

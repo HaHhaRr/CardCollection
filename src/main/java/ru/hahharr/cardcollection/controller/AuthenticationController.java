@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hahharr.cardcollection.models.orm.UserOrm;
 import ru.hahharr.cardcollection.repository.interfaces.UserRepository;
-import ru.hahharr.cardcollection.models.dto.LoginRequestDto;
-import ru.hahharr.cardcollection.models.dto.TokenResponseDto;
+import ru.hahharr.cardcollection.models.dto.request.LoginRequestDto;
+import ru.hahharr.cardcollection.models.dto.response.TokenResponseDto;
 import ru.hahharr.cardcollection.security.service.AuthenticationService;
 
 import java.util.Optional;
