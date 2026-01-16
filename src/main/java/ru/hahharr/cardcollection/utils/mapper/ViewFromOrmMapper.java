@@ -10,14 +10,10 @@ import ru.hahharr.cardcollection.models.view.PackView;
 public class ViewFromOrmMapper {
 
     public static PackView mapPack(PackOrm packOrm) {
-        return EntityToViewMapper.mapPack(
-                EntityFromOrmMapper.mapPack(
-                        packOrm));
+        return EntityToViewMapper.mapPack(EntityFromOrmMapper.mapPack(packOrm));
     }
 
     public static CollectionView mapCollection(CollectionOrm collectionOrm) {
-        return EntityToViewMapper.mapCollection(
-                EntityFromOrmMapper.mapCollection(
-                        collectionOrm));
+        return EntityToViewMapper.mapCollection(EntityFromOrmMapper.mapCollection(collectionOrm));
     }
 }
