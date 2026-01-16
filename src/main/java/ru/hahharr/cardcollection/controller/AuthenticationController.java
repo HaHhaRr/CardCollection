@@ -17,7 +17,7 @@ import ru.hahharr.cardcollection.security.service.AuthenticationService;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/authentication")
+@RequestMapping("/auth")
 public class AuthenticationController {
 
     @Autowired

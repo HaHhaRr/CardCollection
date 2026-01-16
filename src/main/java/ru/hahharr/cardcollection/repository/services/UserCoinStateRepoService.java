@@ -21,7 +21,7 @@ public class UserCoinStateRepoService {
     @Autowired
     private UserCoinStateRepository userCoinStateRepository;
 
-    public ResponseEntity<UserCoinState> getById(UserId userId) {
+    public ResponseEntity<UserCoinState> getUserState(UserId userId) {
         Optional<UserCoinStateOrm> userCoinStateOrmOptional = userCoinStateRepository.findById(userId);
         return userCoinStateOrmOptional
                 .map(coinStateOrm ->
