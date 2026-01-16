@@ -26,6 +26,10 @@ public class UserCoinStateRepoService {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    public int subtractCoins(UserId userId, int cost) {
+        return userCoinStateRepository.subtractCoins(userId, cost);
+    }
+
     public void save(UserCoinStateOrm userCoinStateOrm) {
         userCoinStateRepository.save(userCoinStateOrm);
     }

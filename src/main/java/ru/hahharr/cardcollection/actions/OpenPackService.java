@@ -24,13 +24,14 @@ import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class RandomService {
+public class OpenPackService {
 
     private static final int TOTAL_CARDS_FROM_PACK = 5;
 
@@ -61,16 +62,19 @@ public class RandomService {
         if (userCoinStateOrm.getTotalCoins() < packOrm.getCost()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        if (userCoinStateRepoService.subtractCoins(userId, packOrm.getCost()) == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         try {
             int totalCoins = userCoinStateOrm.getTotalCoins() - packOrm.getCost();
-            userCoinStateOrm.setTotalCoins(totalCoins);
 
             List<Card> cardDropList = randomCardDrop(packOrm.getDropChanceOrm(), packOrm.getId());
             List<CardId> userCollection = userCollectionOrm.getCards();
             userCollection.addAll(cardDropList.stream().map(Card::getId).toList());
             userCollectionOrm.setCards(userCollection);
 
-            userCoinStateRepoService.save(userCoinStateOrm);
             userCollectionRepoService.save(userCollectionOrm);
 
             return new ResponseEntity<>(new OpenPackResponseDto(totalCoins, cardDropList), HttpStatus.OK);
@@ -87,40 +91,35 @@ public class RandomService {
                 .getBody()
                 .getCardList();
 
-        List<Card> commonCardList = allCardsFromPack.stream()
-                .filter(card -> card.getRarity().equals(Rarity.COMMON))
-                .collect(Collectors.toCollection(ArrayList::new));
+        Map<Rarity, List<Card>> rarityListMap = allCardsFromPack.stream()
+                .collect(Collectors.groupingBy(Card::getRarity));
 
-        List<Card> rareCardList = allCardsFromPack.stream()
-                .filter(card -> card.getRarity().equals(Rarity.RARE))
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        List<Card> epicCardList = allCardsFromPack.stream()
-                .filter(card -> card.getRarity().equals(Rarity.EPIC))
-                .collect(Collectors.toCollection(ArrayList::new));
-        return generateCardDropList(dropChance, commonCardList, rareCardList, epicCardList);
+        return generateCardDropList(dropChance, rarityListMap);
     }
 
-    private List<Card> generateCardDropList(DropChance dropChance, List<Card> commonCardList,
-                                            List<Card> rareCardList, List<Card> epicCardList) {
+    private List<Card> generateCardDropList(DropChance dropChance, Map<Rarity, List<Card>> rarityListMap) {
         Random random = new Random();
         List<Card> totalDropCardList = new ArrayList<>();
+
+        List<Card> commonCardList = rarityListMap.get(Rarity.COMMON);
+        List<Card> rareCardList = rarityListMap.get(Rarity.RARE);
+        List<Card> epicCardList = rarityListMap.get(Rarity.EPIC);
 
         for (int i = 0; i < TOTAL_CARDS_FROM_PACK; i++) {
             double randomValue = random.nextDouble(1);
 
             if (randomValue < dropChance.getEpicDropChance()) {
-                int randomIndex = random.nextInt(epicCardList.size());
-                totalDropCardList.add(epicCardList.get(randomIndex));
-                epicCardList.remove(randomIndex);
+                totalDropCardList.add(
+                        epicCardList.get(
+                                random.nextInt(epicCardList.size())));
             } else if (randomValue < dropChance.getRareDropChance()) {
-                int randomIndex = random.nextInt(rareCardList.size());
-                totalDropCardList.add(rareCardList.get(randomIndex));
-                rareCardList.remove(randomIndex);
+                totalDropCardList.add(
+                        rareCardList.get(
+                                random.nextInt(rareCardList.size())));
             } else {
-                int randomIndex = random.nextInt(commonCardList.size());
-                totalDropCardList.add(commonCardList.get(randomIndex));
-                commonCardList.remove(randomIndex);
+                totalDropCardList.add(
+                        commonCardList.get(
+                                random.nextInt(commonCardList.size())));
             }
         }
         return totalDropCardList;

@@ -1,5 +1,6 @@
 package ru.hahharr.cardcollection.actions;
 
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import ru.hahharr.cardcollection.utils.provider.LocalDateTimeProvider;
 import java.util.Optional;
 
 @Service
-public class FreeCoinsService {
+public class CoinsService {
 
     private static final int FREE_COINS_VALUE = 3000;
 
@@ -37,7 +38,7 @@ public class FreeCoinsService {
 
             try {
                 userCoinStateRepoService.save(userCoinStateOrm);
-            } catch (RuntimeException runtimeException) {
+            } catch (HibernateException hibernateException) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return new ResponseEntity<>(HttpStatus.OK);
