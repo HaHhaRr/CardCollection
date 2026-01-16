@@ -11,8 +11,8 @@ import ru.hahharr.cardcollection.models.orm.UserCollectionOrm;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 import ru.hahharr.cardcollection.repository.interfaces.CardRepository;
 import ru.hahharr.cardcollection.repository.interfaces.UserCollectionRepository;
-import ru.hahharr.cardcollection.utils.OffsetLimitPage;
 import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
+import ru.hahharr.cardcollection.utils.resolvers.PageableResolver;
 
 import java.util.Optional;
 
@@ -25,21 +25,29 @@ public class UserCollectionRepoService {
     @Autowired
     private CardRepository cardRepository;
 
-    public ResponseEntity<CardListResponseDto> getUserCollection(UserId userId, int offset, int limit) {
+    @Autowired
+    private PageableResolver pageableResolver;
+
+    public ResponseEntity<CardListResponseDto> getUserCollection(UserId userId, int offset, int limit,
+                                                                 String sortBy, String direction) {
         Optional<UserCollectionOrm> userCollectionOrm = getUserCollection(userId);
         if (userCollectionOrm.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Page<CardOrm> cardOrmPage = cardRepository.findByIdIn(userCollectionOrm.get().getCards(),
-                OffsetLimitPage.of(offset, limit));
+        try {
+            Page<CardOrm> cardOrmPage = cardRepository.findByIdIn(userCollectionOrm.get().getCards(),
+                    pageableResolver.resolveSortBy(offset, limit, sortBy, direction));
 
-        CardListResponseDto cardListResponseDto = new CardListResponseDto(
-                cardOrmPage.stream()
-                        .map(EntityFromOrmMapper::mapCard)
-                        .toList(), cardOrmPage.getTotalPages());
+            CardListResponseDto cardListResponseDto = new CardListResponseDto(
+                    cardOrmPage.stream()
+                            .map(EntityFromOrmMapper::mapCard)
+                            .toList(), cardOrmPage.getTotalPages());
 
-        return new ResponseEntity<>(cardListResponseDto, HttpStatus.OK);
+            return new ResponseEntity<>(cardListResponseDto, HttpStatus.OK);
+        } catch (NullPointerException nullPointerException) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     public void save(UserCollectionOrm userCollectionOrm) {

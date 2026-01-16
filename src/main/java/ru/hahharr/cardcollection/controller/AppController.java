@@ -111,7 +111,10 @@ public class AppController {
     public ResponseEntity<CardListResponseDto> getUserCollection(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam("offset") int offset,
-            @RequestParam("limit") int limit) {
-        return userCollectionRepoService.getUserCollection(userDetails.getUser().getId(), offset, limit);
+            @RequestParam("limit") int limit,
+            @RequestParam(value = "sortBy", required = false) String sortBy,
+            @RequestParam(value = "direction", required = false) String direction) {
+        return userCollectionRepoService.getUserCollection(userDetails.getUser().getId(), offset, limit,
+                sortBy, direction);
     }
 }
