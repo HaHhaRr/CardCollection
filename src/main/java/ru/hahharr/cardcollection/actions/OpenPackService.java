@@ -1,6 +1,7 @@
 package ru.hahharr.cardcollection.actions;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,31 +67,24 @@ public class OpenPackService {
         if (userCoinStateRepoService.subtractCoins(userId, packOrm.getCost()) == 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        int totalCoins = userCoinStateOrm.getTotalCoins() - packOrm.getCost();
+        List<Card> cardDropList = randomCardDrop(packOrm.getDropChanceOrm(), packOrm);
+        List<CardId> userCollection = userCollectionOrm.getCards();
 
+        userCollection.addAll(cardDropList.stream().map(Card::getId).toList());
+        userCollectionOrm.setCards(userCollection);
         try {
-            int totalCoins = userCoinStateOrm.getTotalCoins() - packOrm.getCost();
-
-            List<Card> cardDropList = randomCardDrop(packOrm.getDropChanceOrm(), packOrm.getId());
-            List<CardId> userCollection = userCollectionOrm.getCards();
-            userCollection.addAll(cardDropList.stream().map(Card::getId).toList());
-            userCollectionOrm.setCards(userCollection);
-
             userCollectionRepoService.save(userCollectionOrm);
-
             return new ResponseEntity<>(new OpenPackResponseDto(totalCoins, cardDropList), HttpStatus.OK);
-        } catch (RuntimeException runtimeException) {
-            log.error("RuntimeException: ", runtimeException);
+        } catch (HibernateException hibernateException) {
+            log.error("HibernateException: ", hibernateException);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private List<Card> randomCardDrop(DropChanceOrm dropChanceOrm, PackId packId) throws NullPointerException {
+    private List<Card> randomCardDrop(DropChanceOrm dropChanceOrm, PackOrm packOrm) {
+        List<Card> allCardsFromPack = packRepoService.getCardsListFromPack(packOrm);
         DropChance dropChance = EntityFromOrmMapper.mapDropChance(dropChanceOrm);
-
-        List<Card> allCardsFromPack = packRepoService.getCardsFromPack(packId, 0, Integer.MAX_VALUE)
-                .getBody()
-                .getCardList();
-
         Map<Rarity, List<Card>> rarityListMap = allCardsFromPack.stream()
                 .collect(Collectors.groupingBy(Card::getRarity));
 

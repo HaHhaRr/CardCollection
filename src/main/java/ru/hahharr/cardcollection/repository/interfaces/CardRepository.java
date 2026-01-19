@@ -19,4 +19,6 @@ public interface CardRepository extends JpaRepository<CardOrm, CardId> {
     Set<CardId> findCardIdsByCollectionOrm(@Param("collectionOrm") CollectionOrm collectionOrm);
 
     Page<CardOrm> findByIdIn(List<CardId> ids, Pageable pageable);
+
+    List<CardOrm> findByIdIn(List<CardId> ids);
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.hahharr.cardcollection.models.dto.request.AddPackRequestDto;
 import ru.hahharr.cardcollection.models.dto.response.CardListResponseDto;
 import ru.hahharr.cardcollection.models.dto.response.PackViewResponseDto;
+import ru.hahharr.cardcollection.models.entity.Card;
 import ru.hahharr.cardcollection.models.orm.CardOrm;
 import ru.hahharr.cardcollection.models.orm.CollectionOrm;
 import ru.hahharr.cardcollection.models.orm.DropChanceOrm;
@@ -87,6 +88,13 @@ public class PackRepoService {
                         .toList(), cardListPage.getTotalPages());
 
         return new ResponseEntity<>(cardListResponseDto, HttpStatus.OK);
+    }
+
+    public List<Card> getCardsListFromPack(PackOrm packOrm) {
+        return cardRepository.findByIdIn(packOrm.getCards())
+                .stream()
+                .map(EntityFromOrmMapper::mapCard)
+                .toList();
     }
 
     public Optional<PackOrm> getPack(PackId packId) {
