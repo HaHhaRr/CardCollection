@@ -15,6 +15,10 @@ import ru.hahharr.cardcollection.models.dto.response.CardListResponseDto;
 import ru.hahharr.cardcollection.models.dto.response.CollectionViewResponseDto;
 import ru.hahharr.cardcollection.models.dto.response.OpenPackResponseDto;
 import ru.hahharr.cardcollection.models.dto.response.PackViewResponseDto;
+import ru.hahharr.cardcollection.models.dto.CardListResponseDto;
+import ru.hahharr.cardcollection.models.dto.CollectionViewResponseDto;
+import ru.hahharr.cardcollection.models.dto.PackViewResponseDto;
+import ru.hahharr.cardcollection.models.dto.UserCardListResponseDto;
 import ru.hahharr.cardcollection.models.entity.Card;
 import ru.hahharr.cardcollection.models.entity.UserCoinState;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
@@ -108,7 +112,7 @@ public class AppController {
     }
 
     @GetMapping("/user_collection")
-    public ResponseEntity<CardListResponseDto> getUserCollection(
+    public ResponseEntity<UserCardListResponseDto> getUserCollection(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam("offset") int offset,
             @RequestParam("limit") int limit,
