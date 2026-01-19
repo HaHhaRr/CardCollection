@@ -3,6 +3,7 @@ package ru.hahharr.cardcollection.actions;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -64,9 +65,13 @@ public class OpenPackService {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if (userCoinStateRepoService.subtractCoins(userId, packOrm.getCost()) == 0) {
+        try {
+            userCoinStateRepoService.subtractCoins(userId, packOrm.getCost());
+        } catch (DataIntegrityViolationException exception) {
+            log.error("Constraint violated: {}", exception.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         int totalCoins = userCoinStateOrm.getTotalCoins() - packOrm.getCost();
         List<Card> cardDropList = randomCardDrop(packOrm.getDropChanceOrm(), packOrm);
         List<CardId> userCollection = userCollectionOrm.getCards();

@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Check;
 import ru.hahharr.cardcollection.utils.JsonReference;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 @Getter
 @EqualsAndHashCode
 @Table(name = "userCoinState")
+@Check(constraints = "total_coins >= 0")
 public class UserCoinStateOrm {
 
     @Id

@@ -14,7 +14,6 @@ public interface UserCoinStateRepository extends JpaRepository<UserCoinStateOrm,
 
     @Transactional
     @Modifying
-    @Query("UPDATE UserCoinStateOrm u SET u.totalCoins = u.totalCoins - :cost "
-            + "WHERE u.id = :userId AND u.totalCoins >= :cost")
-    int subtractCoins(@Param("userId") UserId userId, @Param("cost") int cost);
+    @Query("UPDATE UserCoinStateOrm u SET u.totalCoins = u.totalCoins - :cost WHERE u.id = :userId")
+    void subtractCoins(@Param("userId") UserId userId, @Param("cost") int cost);
 }

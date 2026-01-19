@@ -1,6 +1,7 @@
 package ru.hahharr.cardcollection.repository.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,8 @@ public class UserCoinStateRepoService {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    public int subtractCoins(UserId userId, int cost) {
-        return userCoinStateRepository.subtractCoins(userId, cost);
+    public void subtractCoins(UserId userId, int cost) throws DataIntegrityViolationException {
+        userCoinStateRepository.subtractCoins(userId, cost);
     }
 
     public void save(UserCoinStateOrm userCoinStateOrm) {
