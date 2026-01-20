@@ -104,14 +104,17 @@ public class OpenPackService {
         List<Card> rareCardList = rarityListMap.get(Rarity.RARE);
         List<Card> epicCardList = rarityListMap.get(Rarity.EPIC);
 
+        double epicDropChance = dropChance.getEpicDropChance();
+        double rareDropChance = epicDropChance + dropChance.getRareDropChance();
+
         for (int i = 0; i < TOTAL_CARDS_FROM_PACK; i++) {
             double randomValue = random.nextDouble(1);
 
-            if (randomValue < dropChance.getEpicDropChance()) {
+            if (randomValue < epicDropChance) {
                 totalDropCardList.add(
                         epicCardList.get(
                                 random.nextInt(epicCardList.size())));
-            } else if (randomValue < dropChance.getRareDropChance()) {
+            } else if (randomValue < rareDropChance) {
                 totalDropCardList.add(
                         rareCardList.get(
                                 random.nextInt(rareCardList.size())));

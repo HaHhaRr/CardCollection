@@ -65,6 +65,7 @@ public class DropChanceOrm {
                 || commonDropChance < 0
                 || epicDropChance >= rareDropChance
                 || rareDropChance >= commonDropChance
+                || (epicDropChance + rareDropChance) < 100
                 || (epicDropChance + rareDropChance + commonDropChance) > 100) {
             throw new IllegalArgumentException(WRONG_DROP_CHANCE_MESSAGE);
         }
