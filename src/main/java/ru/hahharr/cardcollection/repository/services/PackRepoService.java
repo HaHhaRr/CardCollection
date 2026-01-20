@@ -5,9 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.dto.AddPackRequestDto;
-import ru.hahharr.cardcollection.models.dto.CardListResponseDto;
-import ru.hahharr.cardcollection.models.dto.PackViewResponseDto;
+import ru.hahharr.cardcollection.models.dto.request.AddPackRequestDto;
+import ru.hahharr.cardcollection.models.dto.response.CardListResponseDto;
+import ru.hahharr.cardcollection.models.dto.response.PackViewResponseDto;
+import ru.hahharr.cardcollection.models.entity.Card;
 import ru.hahharr.cardcollection.models.orm.CardOrm;
 import ru.hahharr.cardcollection.models.orm.CollectionOrm;
 import ru.hahharr.cardcollection.models.orm.DropChanceOrm;
@@ -89,7 +90,14 @@ public class PackRepoService {
         return new ResponseEntity<>(cardListResponseDto, HttpStatus.OK);
     }
 
-    private Optional<PackOrm> getPack(PackId packId) {
+    public List<Card> getCardsListFromPack(PackOrm packOrm) {
+        return cardRepository.findByIdIn(packOrm.getCards())
+                .stream()
+                .map(EntityFromOrmMapper::mapCard)
+                .toList();
+    }
+
+    public Optional<PackOrm> getPack(PackId packId) {
         return packRepository.findById(packId);
     }
 

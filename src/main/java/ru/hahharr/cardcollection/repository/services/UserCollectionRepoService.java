@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.dto.CardListResponseDto;
+import ru.hahharr.cardcollection.models.dto.response.CardListResponseDto;
 import ru.hahharr.cardcollection.models.orm.CardOrm;
 import ru.hahharr.cardcollection.models.orm.UserCollectionOrm;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
@@ -42,7 +42,11 @@ public class UserCollectionRepoService {
         return new ResponseEntity<>(cardListResponseDto, HttpStatus.OK);
     }
 
-    private Optional<UserCollectionOrm> getUserCollection(UserId userId) {
+    public void save(UserCollectionOrm userCollectionOrm) {
+        userCollectionRepository.save(userCollectionOrm);
+    }
+
+    public Optional<UserCollectionOrm> getUserCollection(UserId userId) {
         return userCollectionRepository.findById(userId);
     }
 }

@@ -1,4 +1,4 @@
-package ru.hahharr.cardcollection.models.dto;
+package ru.hahharr.cardcollection.models.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

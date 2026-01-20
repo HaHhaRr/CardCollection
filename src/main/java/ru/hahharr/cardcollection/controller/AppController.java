@@ -10,14 +10,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hahharr.cardcollection.models.dto.CardListResponseDto;
-import ru.hahharr.cardcollection.models.dto.CollectionViewResponseDto;
-import ru.hahharr.cardcollection.models.dto.PackViewResponseDto;
+import ru.hahharr.cardcollection.actions.CoinsService;
+import ru.hahharr.cardcollection.models.dto.response.CardListResponseDto;
+import ru.hahharr.cardcollection.models.dto.response.CollectionViewResponseDto;
+import ru.hahharr.cardcollection.models.dto.response.OpenPackResponseDto;
+import ru.hahharr.cardcollection.models.dto.response.PackViewResponseDto;
 import ru.hahharr.cardcollection.models.entity.Card;
 import ru.hahharr.cardcollection.models.entity.UserCoinState;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 import ru.hahharr.cardcollection.models.primitives.id.PackId;
+import ru.hahharr.cardcollection.actions.OpenPackService;
 import ru.hahharr.cardcollection.repository.services.CardRepoService;
 import ru.hahharr.cardcollection.repository.services.CollectionRepoService;
 import ru.hahharr.cardcollection.repository.services.PackRepoService;
@@ -44,6 +47,12 @@ public class AppController {
     @Autowired
     private UserCollectionRepoService userCollectionRepoService;
 
+    @Autowired
+    private OpenPackService openPackService;
+
+    @Autowired
+    private CoinsService coinsService;
+
     @GetMapping("/userState")
     public ResponseEntity<UserCoinState> getUserState(@AuthenticationPrincipal CustomUserDetails userDetails) {
         return userCoinStateRepoService.getUserState(userDetails.getUser().getId());
@@ -51,7 +60,13 @@ public class AppController {
 
     @PutMapping("/actions/get_free_coins")
     public ResponseEntity<HttpStatus> getFreeCoins(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        return userCoinStateRepoService.addFreeCoins(userDetails.getUser().getId());
+        return coinsService.addFreeCoins(userDetails.getUser().getId());
+    }
+
+    @PutMapping("/actions/open_pack/{id}")
+    public ResponseEntity<OpenPackResponseDto> openPack(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                        @PathVariable("id") PackId packId) {
+        return openPackService.openPack(userDetails, packId);
     }
 
     @GetMapping("/packs")
