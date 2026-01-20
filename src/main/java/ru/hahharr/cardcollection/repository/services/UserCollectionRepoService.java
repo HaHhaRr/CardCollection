@@ -5,16 +5,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.hahharr.cardcollection.models.dto.response.CardListResponseDto;
+import ru.hahharr.cardcollection.models.dto.UserCardCollectionDto;
+import ru.hahharr.cardcollection.models.dto.response.UserCardListResponseDto;
 import ru.hahharr.cardcollection.models.orm.CardOrm;
 import ru.hahharr.cardcollection.models.orm.UserCollectionOrm;
+import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.UserId;
 import ru.hahharr.cardcollection.repository.interfaces.CardRepository;
 import ru.hahharr.cardcollection.repository.interfaces.UserCollectionRepository;
-import ru.hahharr.cardcollection.utils.OffsetLimitPage;
 import ru.hahharr.cardcollection.utils.mapper.EntityFromOrmMapper;
+import ru.hahharr.cardcollection.utils.resolvers.PageableResolver;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserCollectionRepoService {
@@ -25,19 +30,27 @@ public class UserCollectionRepoService {
     @Autowired
     private CardRepository cardRepository;
 
-    public ResponseEntity<CardListResponseDto> getUserCollection(UserId userId, int offset, int limit) {
+    public ResponseEntity<UserCardListResponseDto> getUserCollection(UserId userId, int offset, int limit,
+                                                                     String sortBy, String direction) {
         Optional<UserCollectionOrm> userCollectionOrm = getUserCollection(userId);
         if (userCollectionOrm.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        List<CardId> cardIdList = userCollectionOrm.get().getCards();
+        Map<CardId, Long> cardIdIntegerMap = cardIdList.stream()
+                .collect(Collectors.groupingBy(c -> c, Collectors.counting()));
 
-        Page<CardOrm> cardOrmPage = cardRepository.findByIdIn(userCollectionOrm.get().getCards(),
-                OffsetLimitPage.of(offset, limit));
+        Page<CardOrm> cardOrmPage = cardRepository.findByIdIn(cardIdList,
+                PageableResolver.resolveSortBy(offset, limit, sortBy, direction));
 
-        CardListResponseDto cardListResponseDto = new CardListResponseDto(
+        boolean hasNext = cardOrmPage.getTotalElements() > offset + limit;
+
+        UserCardListResponseDto cardListResponseDto = new UserCardListResponseDto(
                 cardOrmPage.stream()
                         .map(EntityFromOrmMapper::mapCard)
-                        .toList(), cardOrmPage.getTotalPages());
+                        .map(card -> new UserCardCollectionDto(card,
+                                cardIdIntegerMap.get(card.getId())))
+                        .toList(), hasNext);
 
         return new ResponseEntity<>(cardListResponseDto, HttpStatus.OK);
     }

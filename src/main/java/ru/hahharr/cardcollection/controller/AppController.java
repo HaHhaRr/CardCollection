@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hahharr.cardcollection.actions.CoinsService;
+import ru.hahharr.cardcollection.actions.OpenPackService;
+import ru.hahharr.cardcollection.models.dto.response.UserCardListResponseDto;
 import ru.hahharr.cardcollection.models.dto.response.CardListResponseDto;
 import ru.hahharr.cardcollection.models.dto.response.CollectionViewResponseDto;
 import ru.hahharr.cardcollection.models.dto.response.OpenPackResponseDto;
@@ -20,7 +22,6 @@ import ru.hahharr.cardcollection.models.entity.UserCoinState;
 import ru.hahharr.cardcollection.models.primitives.id.CardId;
 import ru.hahharr.cardcollection.models.primitives.id.CollectionId;
 import ru.hahharr.cardcollection.models.primitives.id.PackId;
-import ru.hahharr.cardcollection.actions.OpenPackService;
 import ru.hahharr.cardcollection.repository.services.CardRepoService;
 import ru.hahharr.cardcollection.repository.services.CollectionRepoService;
 import ru.hahharr.cardcollection.repository.services.PackRepoService;
@@ -108,10 +109,13 @@ public class AppController {
     }
 
     @GetMapping("/user_collection")
-    public ResponseEntity<CardListResponseDto> getUserCollection(
+    public ResponseEntity<UserCardListResponseDto> getUserCollection(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam("offset") int offset,
-            @RequestParam("limit") int limit) {
-        return userCollectionRepoService.getUserCollection(userDetails.getUser().getId(), offset, limit);
+            @RequestParam("limit") int limit,
+            @RequestParam(value = "sortBy", required = false) String sortBy,
+            @RequestParam(value = "direction", required = false) String direction) {
+        return userCollectionRepoService.getUserCollection(userDetails.getUser().getId(), offset, limit,
+                sortBy, direction);
     }
 }
